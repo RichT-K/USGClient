@@ -15,6 +15,13 @@
   --Yes-background-color:rgb(87, 151, 85);
   --text-color:black;
 } 
+pre{
+  max-width:400px;
+  white-space:pre-wrap;
+}
+.capitalize{
+  text-transform: capitalize;
+}
 body{
     display:grid;
     justify-content: center;
@@ -27,4 +34,20 @@ body{
 a{
   text-decoration: underline;
   color:black;
+}
+.Verbiage b{
+  font-weight:normal;
+  text-shadow: 1px 1px 1px #a5a5a5;
+}
+form.DOTTED label{
+  position:relative;
+}
+form.DOTTED label :after{
+  z-index: -1;
+  position:absolute;
+  top:0em;
+  overflow:hidden;
+  padding-left:0em;
+  padding-right:1em;
+  content:" . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .";
 }

@@ -1,9 +1,10 @@
 <svelte:options customElement="usg-home-component" />
 <script>
   import { onMount } from 'svelte';
+  import {fnGetUser} from '/context/User';
   const aPath = location.pathname.substr(1).toLowerCase().split("/");
   const root = "/" +(aPath[0] || "");
-
+  let You = fnGetUser();
   let opened="";
   let pathtext = root=="/"?"Try a different path":"... or not :)";
   onMount(()=>{
@@ -14,8 +15,12 @@
   })
 </script>
 <h1>Welcome To USGolfers</h1>
-<h2 class="{opened}">A Svelte Component Project
-</h2>
+<h2 class="{opened}">A Svelte Component Project</h2>
+{#if You.alias}
+<div>
+  Hi {You.alias}! {#if !You.userid}You don't have an account but we can pretend!{/if}
+</div>
+{/if}
 <h3 class="{opened}">
   <div>Root:{root}</div>
 

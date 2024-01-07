@@ -3,6 +3,7 @@ import Home     from '/src/components/Home.svelte';
 import NotFound from '/src/components/NotFound.svelte';
 import Latest from '/src/components/Latest.svelte';
 import Profile from '/src/Profile/Profile.svelte';
+import Games from '/src/Games/Home.svelte';
 import Template from '/src/components/Template.svelte';
 
 export const PageHistory={
@@ -28,6 +29,7 @@ export const Routes = {
     [path]              :{text:"USGolfers ",  use:Home,     aProps:{User}},
     [path="/latest"]    :{text:"Latest",      use:Latest,   aProps:{User}},
     [path="/profile"]   :{text:"Profile",     use:Profile,  aProps:{aPath}},
+    [path="/games"]     :{text:"Games",       use:Games,    aProps:{aPath}},
     [path="/template"]  :{text:"Template",    use:Template, aProps:{User}},
 }
 let jRoutes = Routes;

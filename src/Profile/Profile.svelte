@@ -5,6 +5,7 @@
     import Settings from "./Settings.svelte";
     import Login from "./Login.svelte";
     import Logout from "./Logout.svelte";
+    import ForgotPassword from "./ForgotPassword.svelte";
     import Register from "./Register.svelte";
     export let aPath=[];
     let User = fnGetUser();
@@ -22,6 +23,8 @@
     <a href on:click|preventDefault="{onChangeSection}">Login</a>
     {#if User.isLoggedIn}
     <a href on:click|preventDefault="{onChangeSection}">Logout</a>
+    {:else}
+    <a href on:click|preventDefault="{onChangeSection}">Forgot Password</a>
     {/if}
     <a href on:click|preventDefault="{onChangeSection}">Register</a>
 </div>
@@ -33,6 +36,8 @@
 <Logout/>
 {:else if section == "register"}
 <Register/>
+{:else if section == "forgot password"}
+<ForgotPassword/>
 {:else}
 <div>
     <Settings />
@@ -48,3 +53,4 @@
         gap:2em;
     }
 </style>
+

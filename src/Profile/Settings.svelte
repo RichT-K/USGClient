@@ -1,13 +1,18 @@
 <svelte:options customElement="usg-profile-settings" />
 <script>
+  import { parse } from 'svelte/compiler';
     import {fnSettings,fnGetUser} from '/context/User';
     let User = fnGetUser();
-    let U = {
-        ...User.Settings,
-        get About(){
-            return User.fnAbout(U);
-        }
+    let U = {}
+    function fnReset(){
+      U = {
+          ...JSON.parse(JSON.stringify(User.Settings)),
+          get About(){
+              return User.fnAbout(U);
+          }
+      }
     }
+    fnReset();
     function onSubmit(){
         fnSettings(U);
     }
@@ -16,8 +21,8 @@
 <form class="DOTTED" action="login" method="get" on:submit|preventDefault={onSubmit}>
 
     <label><span>ID</span><input type="text" readonly name="userid" value="{U.userid}"/></label>    
-    <label><span>Name</span><input type="text" name="name" bind:value="{U.name}"/></label>    
-    <label><span>Alias</span><input type="text" name="displayName" bind:value="{U.displayName}"/></label>    
+    <label><span>Name</span><input type="text" readonly name="fullName" bind:value="{U.fullName}"/></label>    
+    <label><span>Alias</span><input type="text" name="alias" bind:value="{U.alias}"/></label>    
     <label><span>Email</span><input size=30 type="text" readonly name="email" value="{U.email}"/></label>
     {#if !U.email}
     <p class="Verbiage">
@@ -33,30 +38,19 @@
             on:change={()=>{U.jShares[share]=U.jShares[share]?0:1;U=U;}} 
             value="{value}"/></label>
     {/each}
+    <label title="Your question(max. 100 chars) to confirm it's you?">
+      <span>Question(max. 100 chars) to confirm it's you?</span>
+      <br><input type="text" name="question" maxlength="100" bind:value="{U.question}"/>
+    </label>
+    <label title="The answer(max. 50 chars) to your question.">
+      <span>The answer(max. 50 chars) to your question.</span>
+      <br><input type="text" name="secret" maxlength="50" bind:value="{U.secret}"/>
+    </label>
 
-    <div><button type="submit">Update</button></div>
+    <div>
+      <button type="submit">Update</button>
+      <button type="reset" on:click={fnReset}>Reset</button>
+    </div>
 </form>
 <style>
-  form{
-    display:grid;
-    min-width:fit-content;
-    justify-self: start;
-    justify-content: start;
-    gap:.5em;
-    padding:2em 0em;
-    margin:2em 0em;
-    background-color:var(--form-background-color);
-    border-radius:var(--block-radius);
-  }
-  form label{
-    overflow:hidden;
-    display:grid;
-    justify-self: start;
-    min-width:500px;
-    grid-template-columns:1fr auto;
-  }
-  .Verbiage{
-    min-width:300px;
-    max-width:600px;
-  }
 </style>

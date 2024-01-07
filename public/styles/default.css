@@ -39,8 +39,24 @@ a{
   font-weight:normal;
   text-shadow: 1px 1px 1px #a5a5a5;
 }
+form.DOTTED{
+  display:grid;
+  min-width:fit-content;
+  justify-self: start;
+  justify-content: start;
+  gap:.5em;
+  padding:2em 0em;
+  margin:2em 0em;
+  background-color:var(--form-background-color);
+  border-radius:var(--block-radius);
+}
 form.DOTTED label{
   position:relative;
+  overflow:hidden;
+  display:grid;
+  justify-self: start;
+  min-width:500px;
+  grid-template-columns:1fr auto;
 }
 form.DOTTED label :after{
   z-index: -1;
@@ -51,3 +67,8 @@ form.DOTTED label :after{
   padding-right:1em;
   content:" . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .";
 }
+.Verbiage{
+  min-width:300px;
+  max-width:600px;
+}
+

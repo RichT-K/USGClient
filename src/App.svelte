@@ -2,22 +2,12 @@
 <script>
   import { onMount } from 'svelte';
   import {Routes,Router} from "/lib/Router"
+  import Menu from "/lib/Menu.svelte"
   onMount(()=>{
     console.log("IN SVELTE !!")
   })
 </script>
-<ul class="NavMenu">
-{#each Object.entries(Routes) as [path,Route], key}
-  <li><a href="{path}">{Route.text}</a></li>
-{/each}  
-</ul>
+<Menu {Routes}/>
 <main use:Router />
 <style>
-  .NavMenu{
-    display:grid;
-    gap:1em;
-    grid-auto-flow:column;
-    list-style: none;
-    justify-content: center;
-  }
 </style>

@@ -1,4 +1,5 @@
 :root {
+  --top-avoid-menu:2.5em;
   --font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   --line-height: 1.5;
   --font-weight: 400;
@@ -15,18 +16,38 @@
   --Yes-background-color:rgb(87, 151, 85);
   --text-color:black;
 } 
-pre{
+.sticky{position:sticky; top:var(--top-avoid-menu);}
+.grid{display:grid;}
+.grid-auto-flow-row{display:grid;grid-auto-flow:row;}
+.grid-auto-flow-column{display:grid;grid-auto-flow:column;}
+.align-items-start{align-items:start;}
+.align-items-center{align-items:center;}
+.align-items-end{align-items:end;}
+.align-content-start{align-content:start;}
+.align-content-center{align-content:center;}
+.align-content-end{align-content:end;}
+.justify-self-start{justify-self:start;}
+.justify-self-center{ justify-self:center; }
+.justify-items-start{ justify-items:start; }
+.justify-items-center{ justify-items:center; }
+.justify-content-start{ justify-content:start; }
+.justify-content-center{ justify-content:center; }
+.text-align-start{text-align:left;}
+.text-align-center{text-align:center;}
+.text-align-end{text-align:right;}
+.capitalize{ text-transform: capitalize; }
+.underline{ text-transform: underline; }
+.uppercase{ text-transform: uppercase; }
+.lowercase{ text-transform: lowercase; }
+pre, .pre-wrap{
   max-width:400px;
   white-space:pre-wrap;
-}
-.capitalize{
-  text-transform: capitalize;
 }
 body{
     display:grid;
     justify-content: center;
     align-content: start;
-    padding:5em;
+    padding:2em;
     color:var(--text-color);
     background-color:rgb(255, 255, 255);
     font-family:var(--font-family);
@@ -39,7 +60,7 @@ a{
   font-weight:normal;
   text-shadow: 1px 1px 1px #a5a5a5;
 }
-form.DOTTED{
+.DOTTED{
   display:grid;
   min-width:fit-content;
   justify-self: start;
@@ -50,7 +71,7 @@ form.DOTTED{
   background-color:var(--form-background-color);
   border-radius:var(--block-radius);
 }
-form.DOTTED label{
+.DOTTED label,.DOTTED .label{
   position:relative;
   overflow:hidden;
   display:grid;
@@ -58,7 +79,7 @@ form.DOTTED label{
   min-width:500px;
   grid-template-columns:1fr auto;
 }
-form.DOTTED label :after{
+.DOTTED label span:after,.DOTTED .label span:after{
   z-index: -1;
   position:absolute;
   top:0em;
@@ -66,6 +87,19 @@ form.DOTTED label :after{
   padding-left:0em;
   padding-right:1em;
   content:" . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .";
+}
+input + .msg, input + button  + .msg{
+  max-height:0px;
+  overflow:hidden;
+  transition:all .3s ease;
+}
+input:invalid + .msg, input:invalid + button  + .msg{
+  overflow:auto;
+  max-height:4em;
+}
+input:invalid, input:invalid + .msg, input:invalid + button  + .msg{
+  background-color:rgb(255, 214, 214);
+  border:1px solid red;
 }
 .Verbiage{
   min-width:300px;

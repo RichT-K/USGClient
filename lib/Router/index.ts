@@ -1,4 +1,4 @@
-import { User } from "/context/User";
+import { fnGetUser } from "/context/User";
 import Home     from '/src/components/Home.svelte';
 import NotFound from '/src/components/NotFound.svelte';
 import Latest from '/src/components/Latest.svelte';
@@ -24,12 +24,23 @@ export const aPath = location.pathname.substr(1).toLowerCase().split("/");
 export const root = "/" +(aPath[0] || "");
 let validRoute="/";
 let path="/";
+
+let User = fnGetUser();
 export const Routes = {
     [path]              :{text:"USGolfers ",  use:Home,     aProps:{User}},
-    [path="/latest"]    :{text:"Latest",      use:Latest,   aProps:{User}},
-    [path="/profile"]   :{text:"Profile",     use:Profile,  aProps:{aPath}},
-    [path="/template"]  :{text:"Template",    use:Template, aProps:{User}},
 }
+if(User.isLoggedIn){
+    if( root == "/" || root == "/profile" ){
+        Routes[path="/profile"] = {text:"Profile",     use:Profile,  aProps:{aPath}};
+    }
+    Routes[path="/profile/logout"] = {text:"Logout", use:Profile,  aProps:{aPath}};
+}
+else{
+    Routes[path="/profile/login"] = {text:"Login", use:Profile,  aProps:{aPath}};
+}
+Routes[path="/latest"] = {text:"Latest",      use:Latest,   aProps:{User}};
+Routes[path="/template"]={text:"Template",    use:Template, aProps:{User}};
+
 let jRoutes = Routes;
 let Instance = NotFound;
 let route="";

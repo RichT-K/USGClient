@@ -76,10 +76,11 @@ export const jNewUser = {
     ptLocation:"", 
     question:"",
     secret:"",
-    jShares:{ name:0, loggedin:0, location:0, shares:0, courses:0, roles:0 }, 
+    jShares:{ name:0, loggedin:0, location:0, shares:0, courses:0, roles:0, data:0 }, 
     jCourses:{}, 
     jRoles:{},
-    jBank:{}
+    jBank:{},
+    jData:{}
 }
 let jUser = {};
 export const User={
@@ -97,6 +98,24 @@ export const User={
     },
     get About(){
         return this.fnAbout();
+    },
+    get isaGolfer(){return this.isA("golfer");},
+    get isanAdmin(){return this.isA("admin");},
+    get isaUSGAdmin(){return this.isA("usgadmin");},
+    isA(role){
+        return this.hasA.call(jUser.jRoles,role);
+    },
+    hasACourse(courseid){
+        return this.hasA.call(jUser.jCourses,courseid);
+    },
+    hasA(thing, like, value){
+        if(this[thing] !== undefined) {
+            if(like===undefined) return this[thing];
+            return this[thing] === like?true:false;
+        }
+        if(jUser[thing]){
+            return User.hasA.call(jUser[thing],like, value);
+        }
     },
     fnAbout(jProxy){
         let Your = jProxy || jUser;

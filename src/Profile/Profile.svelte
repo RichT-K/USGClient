@@ -7,6 +7,7 @@
     import Logout from "./Logout.svelte";
     import ForgotPassword from "./ForgotPassword.svelte";
     import Register from "./Register.svelte";
+    import Data from "./Data.svelte";
     export let aPath=[];
     let User = fnGetUser();
     let section = (aPath[1] || aPath[0]).toLowerCase();
@@ -20,6 +21,7 @@
 </script>
 <div class="flex">
     <a href on:click|preventDefault="{onChangeSection}">Profile</a>
+    <a href on:click|preventDefault="{onChangeSection}">Data</a>
     <a href on:click|preventDefault="{onChangeSection}">Login</a>
     {#if User.isLoggedIn}
     <a href on:click|preventDefault="{onChangeSection}">Logout</a>
@@ -28,10 +30,12 @@
     {/if}
     <a href on:click|preventDefault="{onChangeSection}">Register</a>
 </div>
-<div>
-    <h1>{User.alias || "User"} {section}</h1>
+<div class="Verbiage">
+    <h1><b>{User.alias || "User"} {section}</b></h1>
 {#if section=="login" }
 <Login/>
+{:else if section == "data"}
+<Data/>
 {:else if section == "logout" && User.isLoggedIn}
 <Logout/>
 {:else if section == "register"}
@@ -47,6 +51,8 @@
 <style>
     h1{
         text-transform: capitalize;
+        margin:.2em 0em;
+        padding:.2em 0em;
     }
     .flex{
         display:flex;

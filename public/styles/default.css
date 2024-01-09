@@ -47,7 +47,7 @@ body{
     display:grid;
     justify-content: center;
     align-content: start;
-    padding:2em;
+    padding:2em 0em;
     color:var(--text-color);
     background-color:rgb(255, 255, 255);
     font-family:var(--font-family);
@@ -104,5 +104,14 @@ input:invalid, input:invalid + .msg, input:invalid + button  + .msg{
 .Verbiage{
   min-width:300px;
   max-width:600px;
+}
+.TV{
+  border:0;
+  outline:1px solid rgb(131, 131, 131);
+  position:absolute;
+  left:5vw;
+  width:80vw!important;
+  height:60vh!important;
+  margin-bottom:10vh;
 }
 

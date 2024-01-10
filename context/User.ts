@@ -110,7 +110,8 @@ export const User={
     get isanAdmin(){return this.isA("admin");},
     get isaUSGAdmin(){return this.isA("usgadmin");},
     isA(role){
-        return this.hasA.call(jUser.jRoles,role);
+        if(jUser && jUser.jRoles)
+            return this.hasA.call(jUser.jRoles,role);
     },
     set Role(Role){
         /* the Role.type is jRoles member and the Role is the data */
@@ -132,6 +133,7 @@ export const User={
     get showChangesMessage(){return (jUser.jPreferences||{}).showChangesMessage?true:false },
     set showChangesMessage(tf){(jUser.jPreferences = (jUser.jPreferences||{})).showChangesMessage= tf?1:0 },
     hasACourse(courseid){
+        if(jUser && jUser.jCourses)
         return this.hasA.call(jUser.jCourses,courseid);
     },
     hasA(thing, like, value){

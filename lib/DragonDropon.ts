@@ -22,13 +22,14 @@ export class Drag{
     effectAllowed  = MOVE;
     #state         = 0;
     targetId       = "";
-    aData          = undefined;
+    #data          = undefined;
     #draggable      =true;
     Element = {
         x:0,
     }
     constructor(id,options={}){
-        this.aData = options.aData || [];
+        this.#data = options.data || [];
+        const self = this;
         switch(options.effectAllowed){
             case NONE:      this.effectAllowed = NONE;break;
             case ALL:       this.effectAllowed = ALL;break;
@@ -54,12 +55,15 @@ export class Drag{
             let result = e.dataTransfer.dropEffect;
             if(e.dataTransfer.dropEffect == NONE){
                 this.#state = (Math.abs(e.clientX-this.Element.x) > e.target.clientWidth) ? THROWN : HOME;
-                console.log("Drag End:",e.target.getAttribute('id'),result);
+                if(this.#state==HOME && options.nochange) options.nochange(e,self.#data);
+                if(this.#state==THROWN && options.thrown) options.thrown(e,self.#data);
             }
             else{
                 this.#state = DROPPED;
+                if(options.dropped) options.dropped(e,self.#data);
             }
-            if(options.dragend) options.dragend(e,result);
+            if(options.Dropon) options.Dropon.dropped(e,self.#data);
+            if(options.dragend) options.dragend(e,result,self.#data);
         }
     }
     get draggable(){return this.#draggable;}
@@ -122,6 +126,9 @@ export class Drop{
             e.dataTransfer.setData("state", this.#state=DROPPED);
             e.preventDefault();
             if(options.drop) options.drop(e);
+        }
+        this.dropped=(e,data)=>{ 
+            if(options.dropped) options.dropped(e,data);
         }
     }
 }

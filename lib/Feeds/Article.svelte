@@ -54,5 +54,7 @@ article .categories{
     padding:0em 1em;
     grid-template-columns: repeat(auto-fill, 30%);
     justify-items: stretch;
+    text-transform: capitalize;
+    justify-content: center;
 }
 </style>

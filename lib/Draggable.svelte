@@ -1,15 +1,26 @@
 <svelte:options customElement="usg-draggable" />
 <script>
-    import {Drag, HOME} from '/lib/DragonDropon';
-    export let id, Thing=undefined,fnDragend=undefined,dragDelay=400;
+    import {Drag} from '/lib/DragonDropon';
+    export let 
+        id, 
+        Thing=undefined,
+        fnDragend=undefined,
+        fnDropped=undefined,
+        fnNoChange=undefined,
+        fnThrown=undefined,
+        Dropon=undefined,
+        data=undefined,
+        dragDelay=400;
     let img;
 
     if(Thing && Thing.imgSrc){
         img = new Image(200);
         img.src=Thing.imgSrc;
     }
-    const D = new Drag(id,{
+    const Dragon = new Drag(id,{
         image:img,
+        Dropon,
+        data,
         dragstart(e){
             e.dataTransfer.setData("text",Thing.id);
             e.dataTransfer.setData("Thing",JSON.stringify(Thing));
@@ -19,25 +30,28 @@
         },
         dragend(e){
             console.log("Drag End:",
-                "State:" + D.state,
-                "Status:" + D.status,
+                "State:" + Dragon.state,
+                "Status:" + Dragon.status,
                 "dropEffect:" + e.dataTransfer.dropEffect,
             );
-            dragResult = D.status;
+            dragResult = Dragon.status;
             setTimeout(()=>{
-                if(fnDragend ) fnDragend(Thing.id, D.state);
-                D.clear = dragResult="";
+                if(fnDragend ) fnDragend(Thing.id, Dragon.state);
+                Dragon.clear = dragResult="";
             },dragDelay);
-        }
+        },
+         dropped : fnDropped,
+         nochange: fnNoChange,
+         thrown  : fnThrown
     });
-    $: dragResult = D.status;
+    $: dragResult = Dragon.status;
 
 </script>
 <div   
     id="{id}" 
-    draggable   = "{D.draggable}"
-    on:dragstart={D.dragstart}
-    on:dragend  ={D.dragend}
+    draggable   = "{Dragon.draggable}"
+    on:dragstart={Dragon.dragstart}
+    on:dragend  ={Dragon.dragend}
     style="background-color:{Thing.color};"
      >
 {#if dragResult}<div>{dragResult}</div>{/if}

@@ -1,9 +1,10 @@
 <svelte:options customElement="usg-droppable" />
 <script>
     import {Drop} from '/lib/DragonDropon';
-    export let id,classname="",replaceContent=undefined;
+    export let id,classname="",replaceContent=undefined,fnDropped=undefined,Dropon=undefined;
     let dropping=false;
-    const D = new Drop(id,{
+    Dropon = Dropon || new Drop(id,{
+        dropped:fnDropped,
         dragenter(e){
             dropping=true;
         },
@@ -14,7 +15,6 @@
             console.log("Drop From the Drop Component",
                 e, 
                 "Text:" + e.dataTransfer.getData("text"),
-                "Thing:"+ e.dataTransfer.getData("Thing"),
                 "State:"+ e.dataTransfer.getData("state"),
                 )
             dropping=false;
@@ -26,11 +26,11 @@
 <div   
     class="DROPON {classname} {dropping?"DROPCANDIDATE":""}"
     id="{id}" 
-    droppable   = "{D.droppable}"
-    on:drop|preventDefault={D.drop}
-    on:dragover|preventDefault   ={D.dragover}
-    on:dragenter|preventDefault  ={D.dragenter}
-    on:dragleave|preventDefault  ={D.dragleave}
+    droppable   = "{Dropon.droppable}"
+    on:drop|preventDefault={Dropon.drop}
+    on:dragover|preventDefault   ={Dropon.dragover}
+    on:dragenter|preventDefault  ={Dropon.dragenter}
+    on:dragleave|preventDefault  ={Dropon.dragleave}
      >
 <slot />
 </div>

@@ -19,17 +19,17 @@
         User = fnGetUser();
     }
 </script>
-<div class="flex">
+<nav class="flex">
+    {#if User.isLoggedIn}
     <a href on:click|preventDefault="{onChangeSection}">Profile</a>
     <a href on:click|preventDefault="{onChangeSection}">Data</a>
-    <a href on:click|preventDefault="{onChangeSection}">Login</a>
-    {#if User.isLoggedIn}
     <a href on:click|preventDefault="{onChangeSection}">Logout</a>
     {:else}
+    <a href on:click|preventDefault="{onChangeSection}">Login</a>
+    <a href on:click|preventDefault="{onChangeSection}">Register</a>
     <a href on:click|preventDefault="{onChangeSection}">Forgot Password</a>
     {/if}
-    <a href on:click|preventDefault="{onChangeSection}">Register</a>
-</div>
+</nav>
 <div class="Verbiage">
     <h1><b>{User.alias || "User"} {section}</b></h1>
 {#if section=="login" }
@@ -54,8 +54,9 @@
         margin:.2em 0em;
         padding:.2em 0em;
     }
-    .flex{
+    nav{
         display:flex;
+        justify-content: center;
         gap:2em;
     }
 </style>

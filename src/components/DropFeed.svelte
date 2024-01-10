@@ -89,7 +89,7 @@ function fnDragend(thingId, effect){
     {/each}
 </div>
 {/if}
-<Droppable id="Bucket" classname="Bucket text-align-left" bind:this={Bucket}>
+<Droppable id="Bucket" classname="Bucket text-align-left" bind:this={Bucket} fnDropped={(e,Data)=>{console.log("Bucket received",Data)}}>
     {#if Thing}
     {#if Thing.isFeed}
         <Article jData={F.Items[Thing.index]}/>
@@ -113,7 +113,7 @@ function fnDragend(thingId, effect){
 </Droppable>
 <div class="Things" bind:clientWidth={Thing2.clientWidth}>
     {#each aThings2 as T}
-    <Draggable id="{T.id}" Thing="{T}"  {fnDragend}>
+    <Draggable id="{T.id}" Thing="{T}" data={F.Items[T.index]} {fnDragend} fnDropped={(e,Data)=>{console.log("Dropped On The Bucket",Data)}}>
     <Article thumb={true} jData={F.Items[T.index]}/>
     </Draggable>
     {/each}

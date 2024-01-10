@@ -1,7 +1,7 @@
 <svelte:options customElement="usg-draggable" />
 <script>
     import {Drag, HOME} from '/lib/DragonDropon';
-    export let id, Thing=undefined,fnDragend=undefined;
+    export let id, Thing=undefined,fnDragend=undefined,dragDelay=400;
     let img;
 
     if(Thing && Thing.imgSrc){
@@ -27,7 +27,7 @@
             setTimeout(()=>{
                 if(fnDragend ) fnDragend(Thing.id, D.state);
                 D.clear = dragResult="";
-            },500);
+            },dragDelay);
         }
     });
     $: dragResult = D.status;

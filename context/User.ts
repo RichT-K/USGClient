@@ -103,9 +103,11 @@ export const User={
     get isanAdmin(){return this.isA("admin");},
     get isaUSGAdmin(){return this.isA("usgadmin");},
     isA(role){
-        return this.hasA.call(jUser.jRoles,role);
+        if(jUser && jUser.jRoles)
+            return this.hasA.call(jUser.jRoles,role);
     },
     hasACourse(courseid){
+        if(jUser && jUser.jCourses)
         return this.hasA.call(jUser.jCourses,courseid);
     },
     hasA(thing, like, value){

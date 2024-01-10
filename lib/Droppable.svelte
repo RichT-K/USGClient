@@ -24,7 +24,7 @@
     });
 </script>
 <div   
-    class="{classname} {dropping?"DROPCANDIDATE":""}"
+    class="DROPON {classname} {dropping?"DROPCANDIDATE":""}"
     id="{id}" 
     droppable   = "{D.droppable}"
     on:drop|preventDefault={D.drop}
@@ -35,7 +35,13 @@
 <slot />
 </div>
 <style>
+    .DROPON{
+        height:100%;
+        min-height:100%;
+        overflow:auto;
+        margin-bottom:5em;
+    }
     .DROPCANDIDATE{
-        box-shadow:0px 0px  15px rgb(27, 46, 216);
+        box-shadow:0px 0px .5em rgb(87, 87, 87);
     }
 </style>

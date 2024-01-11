@@ -15,8 +15,11 @@
   --Yes-color:rgb(255, 255, 255);
   --Yes-background-color:rgb(87, 151, 85);
   --text-color:black;
+  --standard-width:500px;
+  --input-radius:.2em;
 } 
 .sticky{position:sticky; top:var(--top-avoid-menu);}
+.flex{display:flex;}
 .grid{display:grid;}
 .grid-auto-flow-row{display:grid;grid-auto-flow:row;}
 .grid-auto-flow-column{display:grid;grid-auto-flow:column;}
@@ -60,6 +63,25 @@ a{
   font-weight:normal;
   text-shadow: 1px 1px 1px #a5a5a5;
 }
+.Menu{
+  z-index:1000;
+}
+nav{
+  display:flex;
+  z-index:900;
+  justify-content: center;
+  gap:2em;
+}
+.message-block{
+  padding:.5em;
+  margin:2em;
+  color:white;
+  text-shadow: 1px 1px 1px #cccccc;
+  background-color:rgb(53, 53, 53)  
+}
+.standard-block{
+  width:var(--standard-width);
+}
 .DOTTED{
   display:grid;
   min-width:fit-content;
@@ -76,7 +98,7 @@ a{
   overflow:hidden;
   display:grid;
   justify-self: start;
-  min-width:500px;
+  min-width:var(--standard-width);
   grid-template-columns:1fr auto;
 }
 .DOTTED label span:after,.DOTTED .label span:after{
@@ -101,8 +123,17 @@ input:invalid, input:invalid + .msg, input:invalid + button  + .msg{
   background-color:rgb(255, 214, 214);
   border:1px solid red;
 }
-.Verbiage{
-  min-width:300px;
-  max-width:600px;
+form button{
+  font-size:1.5em;
+}
+form .button-block{
+  margin:1em;
+  gap:2em;
+}
+.grid .button-block, .flex .button-block{
+  justify-self:center;
+}
+:not(.grid) .button-block, :not(.flex) .button-block{
+  text-align:center
 }
 

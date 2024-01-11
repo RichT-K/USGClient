@@ -8,6 +8,7 @@
     import ForgotPassword from "./ForgotPassword.svelte";
     import Register from "./Register.svelte";
     import Data from "./Data.svelte";
+    import Golfer from "./Golfer.svelte";
     export let aPath=[];
     let User = fnGetUser();
     let section = (aPath[1] || aPath[0]).toLowerCase();
@@ -19,21 +20,24 @@
         User = fnGetUser();
     }
 </script>
-<div class="flex">
-    <a href on:click|preventDefault="{onChangeSection}">Profile</a>
-    <a href on:click|preventDefault="{onChangeSection}">Data</a>
-    <a href on:click|preventDefault="{onChangeSection}">Login</a>
+<nav class="flex sticky">
     {#if User.isLoggedIn}
+    <a href on:click|preventDefault="{onChangeSection}">Settings</a>
+    <a href on:click|preventDefault="{onChangeSection}">Golfer</a>
+    <a href on:click|preventDefault="{onChangeSection}">Data</a>
     <a href on:click|preventDefault="{onChangeSection}">Logout</a>
     {:else}
+    <a href on:click|preventDefault="{onChangeSection}">Login</a>
+    <a href on:click|preventDefault="{onChangeSection}">Register</a>
     <a href on:click|preventDefault="{onChangeSection}">Forgot Password</a>
     {/if}
-    <a href on:click|preventDefault="{onChangeSection}">Register</a>
-</div>
+</nav>
 <div class="Verbiage">
     <h1><b>{User.alias || "User"} {section}</b></h1>
 {#if section=="login" }
 <Login/>
+{:else if section == "golfer"}
+<Golfer/>
 {:else if section == "data"}
 <Data/>
 {:else if section == "logout" && User.isLoggedIn}
@@ -49,14 +53,15 @@
 {/if}
 </div>
 <style>
+    nav{
+        padding:.5em;
+        background-color:white;
+        outline:1px solid rgb(218, 218, 218);
+    }
     h1{
         text-transform: capitalize;
         margin:.2em 0em;
         padding:.2em 0em;
-    }
-    .flex{
-        display:flex;
-        gap:2em;
     }
 </style>
 

@@ -3,6 +3,7 @@
     import { fnGetUser,fnSettings } from "/context/User";
     import { onMount, onDestroy } from 'svelte';
     const maxDataLength=500;
+    let panelName="Data";
     let User = fnGetUser();
     let jData = User.Settings.jData;
     let jField={name:"",value:""};
@@ -20,19 +21,15 @@
     function fnAddField(){
         jData[jField.name.trim()]=jField.value.trim();
         jField.name=jField.value="";
+        User.Data = jData=jData;
     }
     function fnRemoveField(ev){
         delete jData[ev.target.getAttribute("data-field")];
-        jData=jData;
-    }
-    function fnSave(){
-        User.Settings.jData = {...jData};
-        fnSettings({
-          ...JSON.parse(JSON.stringify(User.Settings))
-        })
+        User.Data = jData=jData;
     }
 </script>
 <div class="DOTTED Verbiage" >
+    {@html User.fnChangesVerbiage(panelName)}
     <b>New Data</b>
     <div class="NewField" >
         <div class="label">
@@ -45,8 +42,7 @@
     </div>
     <b>Your Data</b>
     <div class="label">
-        <span class="Verbiage">Your Data is <b>{jSize.length} characters long</b> with <b>{jSize.remaining} chars remaining</b> </span>
-        <button on:click|preventDefault="{fnSave}">Save</button>
+        <span class="Verbiage"><b>{jSize.remaining} characters remaining</b> </span>
     </div>
     <div class="DataFields" >
         <div>Your Data</div>
@@ -67,6 +63,7 @@
 </div>
 <style>
     .DOTTED{
+        max-width:500px;
         margin:0em;
         gap:1em;
     }
@@ -77,9 +74,6 @@
         gap:2em;
         outline:1px solid black;
         border-radius:5px;
-    }
-    p{
-        margin:1em;
     }
     .label{
         display:grid;

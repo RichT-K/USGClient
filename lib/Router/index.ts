@@ -31,9 +31,9 @@ export const Routes = {
 }
 if(User.isLoggedIn){
     if( root == "/" || root == "/profile" ){
-        Routes[path="/profile"] = {text:"Profile",     use:Profile,  aProps:{aPath}};
+        Routes[path="/profile"] = {text:"Profile",       use:Profile,  aProps:{aPath}};
     }
-    Routes[path="/profile/logout"] = {text:"Logout", use:Profile,  aProps:{aPath}};
+    Routes[path="/profile/logout"] = {text:"Logout",     use:Profile,  aProps:{aPath}};
 }
 else{
     Routes[path="/profile/login"] = {text:"Login", use:Profile,  aProps:{aPath}};

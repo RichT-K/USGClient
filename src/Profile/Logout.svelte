@@ -1,23 +1,20 @@
 <svelte:options customElement="usg-profile-logout" />
 <script lang="ts">
-  import {fnLogout,fnGetUser} from '/context/User';
+  import {fnLogout,fnGetUser,fnChangesVerbiage} from '/context/User';
+  let message=undefined;
   let User = fnGetUser();
+  if( User.isLoggedIn){
+    message= "Warning : Your current session will be lost!";
+  }
 </script>
-<form method="get" on:submit|preventDefault={fnLogout}>
-    <div class="warning">Warning : Your current session will be lost!</div>
-    <button type="submit">Logout</button>
+  {#if message}
+  <div class="message-block"><b>{message}</b></div>
+  {/if}
+<form class="grid standard-block" method="get" on:submit|preventDefault={fnLogout}>
+  <p>{@html fnChangesVerbiage()}</p>
+  <div class="button-block">
+  <button type="submit">Logout</button>
+  </div>
 </form>
 <style>
-    h1{
-        font-size:1.2em;
-    }
-  form{
-    display:grid;
-    justify-content: center;
-    gap:.5em;
-    padding:var(--block-padding);
-    margin:var(--block-margin);
-    background-color:var(--form-background-color);
-    border-radius:var(--block-radius);
-  }
 </style>

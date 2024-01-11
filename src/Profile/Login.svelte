@@ -5,27 +5,30 @@
     email:"",
     password:""
   }
-  let User = fnGetUser();
   let message=undefined;
+  let User = fnGetUser();
+  if( User.isLoggedIn){
+    message= "Warning : Your current session will be reset!";
+  }
   function onSubmit(){
     message=undefined;
     fnLogin(U).then((jResp)=>{
       User = fnGetUser();
       if(jResp.errors){
-        message = jResp.errors.join(" ");
+        message = "Hmm, that didn't work " + jResp.errors.join(" ");
       }
       else{
         message = User.alias + " you're logged in!";
+        setTimeout(()=>{
+          location="/profile";
+        },2000);
       }
     });
   }
 </script>
 
-{#if User.isLoggedIn}
-<div class="warning">Warning : Your current session will be reset!</div>
-{/if}
 {#if message}
-<div>{message}</div>
+<div class="message-block">{message}</div>
 {/if}
 <form class="DOTTED" action="login" method="post" on:submit|preventDefault={onSubmit}>
   <label><span>Email</span>
@@ -35,7 +38,7 @@
     <span>Password</span>
     <input type="password" name="password" bind:value="{U.password}" placeHolder="Password" /> 
   </label>
-    <div>
+    <div class="button-block flex">
       <button type="submit">Login</button>
       <button type="reset">Reset</button>
     </div>

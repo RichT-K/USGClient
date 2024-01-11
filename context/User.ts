@@ -105,6 +105,17 @@ export const User={
     isA(role){
         return this.hasA.call(jUser.jRoles,role);
     },
+    set Role(Role){
+        /* the Role.type is jRoles member and the Role is the data */
+        if(Role.type){
+            jUser.jRoles[Role.type] = JSON.parse(JSON.stringify(Role));
+        }
+        saveUser( );
+    },
+    set Data(jData){
+        jUser.jData = JSON.parse(JSON.stringify(jData));
+        saveUser( );
+    },
     hasACourse(courseid){
         return this.hasA.call(jUser.jCourses,courseid);
     },
@@ -117,19 +128,36 @@ export const User={
             return User.hasA.call(jUser[thing],like, value);
         }
     },
+    fnChangesVerbiage(panelName=""){
+        if(panelName=="" || panelName == "Settings"){
+            return `Remember, to save your changes to the <b>Server</b> return to <b>Profile - Settings</b>! 
+            Otherwise temporary changes may be lost or become unusable especialy when you <b>Logout</b>.`;
+        }
+        return `<p>Changes made here in the <b>${panelName} ARE NOT</b> <b>saved to the Server. 
+        <b>Save changes to the Server in Settings</b></p>`;
+    },
+    fnVerbiage(jRole, jProxy){
+        let Your = jProxy || jUser;
+        return `As a Golfer you will be recognized by your Alias(<b>${Your.alias}</b>)${!Your.jShares.roles?", and though you do not share it":""}, 
+        your <b>Handicap(${(jRole.handicap < 0 ? "+":"")+Math.abs(jRole.handicap)})</b> may be shared as may the <b>Courses</b>, <b>Locations</b>,
+        and other <b>Event</b> information submitted by you through your participation.`; 
+    },
     fnAbout(jProxy){
         let Your = jProxy || jUser;
         let jShares = Your.jShares||{};
         let jCourses = Your.jCourses||{};
         let jRoles = Your.jRoles||{};
-        let aSharing = Object.keys(jShares).map(share=>((jShares[share]?"":"not ") + "sharing " + share))
-        aSharing = (aSharing.length?aSharing:['sharing nothing']);
+        let aSharing = Object.keys(jShares).map(share=>("<b class='capitalize'>"+share +"</b>" + (jShares[share]?" <b>is</b>":" is <b>not</b>") + " shared"))
+        aSharing = (aSharing.length?aSharing:['nothing else']);
 
         let aCourses = Object.entries(jCourses).map(([courseid,Course])=>(Course.type + " " + Course.name));
         aCourses = (aCourses.length?aCourses:['no courses']);
 
-        let aRoles = Object.entries(jRoles).map(([role,Role])=>(Role.type));
+        let aRoles = Object.entries(jRoles).map(([role,Role])=>("<b class='capitalize'>"+Role.type+"</b>"));
         aRoles = (aRoles.length?aRoles:['user']);
+        let aRoleGuidance=[];
+        if(jRoles.golfer) aRoleGuidance.push(User.fnVerbiage(jRoles.golfer,Your)); 
+
         return `
 <p>
 <b>${Your.alias||"No alias"}</b>, 
@@ -140,15 +168,16 @@ and your last login was <b>${Your.lastLogin||"never"}</b>.
 Your last known location was at the following coordinates (<b>${Your.location||"unknown"}</b>).
 </p>
 <p>
-You are <b>${aSharing.join("</b>, <b>")}</b>.
-Your roles include <b>${aRoles.join("</b>, <b>")}</b>.
+Your Alias (<b>${jUser.alias}</b>) will always be shared, ${aSharing.join(", ")}.
+Your roles include ${aRoles.join(", ")}.
+<p>${aRoleGuidance.join('<br/>')}</p>
 You follow <b>${aCourses.join("</b>, <b>")}</b>.
 </p>
 <p>
 Your question is <b>${Your.question||"empty"}</b> and your answer is <b>${Your.secret||"empty"}</b>
 </p>
 `    
-      }
+    }
 }
 function saveUser( drop ){
     if(drop) {
@@ -158,6 +187,7 @@ function saveUser( drop ){
     } 
     sessionStorage[sessionKey] = fnEncrypt(JSON.stringify({...jUser}))
 }
+export function fnChangesVerbiage(panelName){ return User.fnChangesVerbiage(panelName);}
 export function fnGetUser(){
     if(!jUser.userid ){
         if( sessionStorage[sessionKey] ){
@@ -172,8 +202,8 @@ export function fnGetUser(){
 }
 export const aInputPatterns={
     password:"[A-Za-z-0-9~!@#$%^&*()_+:;,.|=\-]{8,16}",
-    fullName:"^([A-Z][^\'\`\"]{2}[ |\-][A-Z][^\'\`\"]{2}){,4}$",
-    alias:"^[A-Z][A-Za-z-0-9]{2,16}",
+    fullName:"^(([A-Z][a-z]+) ([A-Z][a-z]* ){0,1}([A-Z][a-z]+(\-[A-Z][a-z]+){0,1}))$",
+    alias:"[A-Z][A-Za-z]{1,15}",
     code:"[0-9]{8,8}"
 };
 function fnRandomCode(){
@@ -329,5 +359,15 @@ export function fnForgotPassword(jFields){
             document.location="/profile";
             return(jUser);
         });
+    }
+}
+export function fnUpdateHandicap(jFields){
+    if(jFields.ghin && jFields.handicap!==undefined){
+        User.Role = {
+            type:"golfer",
+            ghin:jFields.ghin,
+            handicap:jFields.handicap
+        };
+        saveUser();
     }
 }

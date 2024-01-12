@@ -41,7 +41,11 @@
 {#if User.isLoggedIn}
 <div class="warning">Warning : Your current session will be reset!</div>
 {/if}
-<form class="DOTTED" action="login" method="get" on:submit|preventDefault={onRegister}>
+<form class="DOTTED Verbiage" action="login" method="get" on:submit|preventDefault={onRegister}>
+    <p>
+      <b>Email</b>, <b>Password</b>, <b>Fullname</b>, <b>Alias</b>, <b>Question</b>, <b>Answer</b>
+        and <b>Policy Acceptance</b> fields are <b>required</b>!
+    </p>
     {#if message }
     <div><strong>{message}</strong></div>
     {/if}
@@ -54,7 +58,6 @@
     <label title="Valid Chars: {aInputPatterns.password}" ><span>Password(8-16 chars)</span><input type="password" name="password" pattern="{aInputPatterns.password}" minlength=8 maxlength=16 bind:value="{U.password}" placeHolder="Password" /></label> 
     <label title="Valid Chars: {aInputPatterns.fullName}" ><span>Fullname(2+ names, A-Z,4-64 A-9\-)</span><input type="text" name="fullName" pattern="{aInputPatterns.fullName}" minlength=4 maxlength=64 bind:value="{U.fullName}" placeHolder="Full Name" /> </label>
     <label title="Valid Chars: {aInputPatterns.alias}"><span>Alias(1 name,1 A-Z,-16 A-9)</span><input type="text" name="alias" pattern="{aInputPatterns.alias}" minlength=2 maxlength=16 bind:value="{U.alias}" placeHolder="Alias" /> </label>
-    <label><span>Policy Acceptance</span><input type="checkbox" value={1} bind:checked={U.policy} /></label>
     <label title="Your question(max. 100 chars) to confirm it's you?">
       <span>Question(max. 100 chars) to confirm it's you?</span>
       <br><input type="text" name="question" maxlength="100" bind:value="{U.question}"/>
@@ -64,10 +67,39 @@
       <br><input type="text" name="secret" maxlength="50" bind:value="{U.secret}"/>
     </label>
     {/if}
-    <div>
+    <label>
+      <span>Check to Administrator Your Golf Courses</span>
+        <input type="checkbox" bind:checked={U.courseadmin} />
+    </label>
+    {#if U.courseadmin}
+    <p>
+      While we still have considerable work on our end, by requesting Course Administration now
+      you'll be notified when you can beta test the Admin section. When that time comes we'll 
+      contact you at the email you provided today to come back to USGolfers and setup the <b>Handshake</b>.
+      You'll provide <b>domain address</b> of your Course website where we can read meta content we make 
+      available for you to place on your site. The content will be one simple HTML META-TAG containing 
+      your unique Admin Identifier and your unique Course Identifier as it exists in our database.
+      If and when the time comes when multiple courses with multiple administrators are needed, this simple 
+      Handshake solution will suffice and will provide you immediate control, if necessary, over who can update your Course 
+      on our databse.
+    </p>
+    <p>      
+      Because domains are unique and because we'll check for that entry in our database when updates are
+      made, having this file on your website ensures it is publically available with no additional 
+      security adjustments necessary, and that you are the Administrator and can update your Course on our server. 
+      It also indicates to us that your course is actively engaged on USGolfers Network.
+      In addition, copying the data, altering it and placing it on another wesite will render it invalid.
+    </p>
+    {/if}
+
+    <label><span>Policy Acceptance</span><input type="checkbox" value={1} bind:checked={U.policy} /></label>
+    <div class="button-block">
       <button type="submit">Register</button>
       <button type="reset" on:click={()=>{U.answer="";}}>Reset</button>
     </div>
 </form>
 <style>
+.Verbiage{
+  max-width:500px;
+}
 </style>

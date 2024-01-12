@@ -1,6 +1,6 @@
 <svelte:options customElement="usg-profile-logout" />
 <script lang="ts">
-  import {fnLogout,fnGetUser,fnChangesVerbiage} from '/context/User';
+  import {fnLogout,fnGetUser} from '/context/User';
   let message=undefined;
   let User = fnGetUser();
   if( User.isLoggedIn){
@@ -11,7 +11,7 @@
   <div class="message-block"><b>{message}</b></div>
   {/if}
 <form class="grid standard-block" method="get" on:submit|preventDefault={fnLogout}>
-  <p>{@html fnChangesVerbiage()}</p>
+  <p class="Verbiage warning"><b>Have you saved all your updates?</b></p>
   <div class="button-block">
   <button type="submit">Logout</button>
   </div>

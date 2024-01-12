@@ -21,11 +21,11 @@
             <span>___</span>   
         </button>
     </div>
-    <ul class="NavMenu" bind:this={ul}  >
+    <nav class="NavMenu" bind:this={ul}  >
         {#each Object.entries(Routes) as [key,Item] }
-        <li><a href="{key}">{Item.text}</a></li>
+        <a href="{key}">{Item.text}</a>
         {/each}
-    </ul>
+    </nav>
 </div>
 <style>
 a{
@@ -37,6 +37,7 @@ a{
     display:grid;
     justify-content: center;;
     top:0px;
+    height:var(--top-avoid-menu);
     right:0px;
     width: 100%;
     overflow: hidden;
@@ -44,15 +45,8 @@ a{
     outline:1px solid rgb(218, 218, 218);
 }
 
-.NavMenu{
-    display: grid;
-    margin:10px 60px;
-    overflow:hidden;
-    justify-content: left;
-    grid-auto-flow: column;
-    grid-template-columns: repeat(auto-fit,minmax(auto,1fr));
-    gap:2em;
-    list-style: none;
+.Menu > nav{
+    outline:1px solid #aaaaaa00;
 }
 .Menu.has-burger.open{
     position: absolute;

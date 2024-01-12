@@ -80,7 +80,10 @@ export const jNewUser = {
     jCourses:{}, 
     jRoles:{},
     jBank:{},
-    jData:{}
+    jData:{},
+    jPreferences:{
+        showChangesMessage:true
+    },
 }
 let jUser = {};
 export const User={
@@ -96,6 +99,10 @@ export const User={
         };
         return You;
     },
+    set Settings(jSettings){
+        jUser = jSettings;
+        saveUser( );
+    },
     get About(){
         return this.fnAbout();
     },
@@ -110,12 +117,20 @@ export const User={
         if(Role.type){
             jUser.jRoles[Role.type] = JSON.parse(JSON.stringify(Role));
         }
+        else if( typeof(Role) == "string" ){
+            delete jUser.jRoles[Role];
+        }
         saveUser( );
     },
     set Data(jData){
         jUser.jData = JSON.parse(JSON.stringify(jData));
         saveUser( );
     },
+    get possessiveAlias(){
+        return fnPossessiveName(jUser.alias);
+    },
+    get showChangesMessage(){return (jUser.jPreferences||{}).showChangesMessage?true:false },
+    set showChangesMessage(tf){(jUser.jPreferences = (jUser.jPreferences||{})).showChangesMessage= tf?1:0 },
     hasACourse(courseid){
         return this.hasA.call(jUser.jCourses,courseid);
     },
@@ -129,12 +144,14 @@ export const User={
         }
     },
     fnChangesVerbiage(panelName=""){
-        if(panelName=="" || panelName == "Settings"){
-            return `Remember, to save your changes to the <b>Server</b> return to <b>Profile - Settings</b>! 
-            Otherwise temporary changes may be lost or become unusable especialy when you <b>Logout</b>.`;
+        if(!this.showChangesMessage) return "";
+        if(panelName.toLowerCase()=="profile"){
+            return `<div class="Verbiage warning text-align-center">You must return here and click <b>Update</b> 
+            to save changes from the Profile Section up to the <b>Server</b>! 
+            Otherwise, your temporary changes may be lost or become unusable especially when you <b>Logout</b>.</div>`;
         }
-        return `<p>Changes made here in the <b>${panelName} ARE NOT</b> <b>saved to the Server. 
-        <b>Save changes to the Server in Settings</b></p>`;
+        return `<div class="Verbiage warning text-align-center">Changes made here in the <b>${panelName} ARE NOT</b> <b>saved to the Server.<br> 
+        <b>Save changes to the Server in Settings</b></div>`;
     },
     fnVerbiage(jRole, jProxy){
         let Your = jProxy || jUser;
@@ -159,25 +176,36 @@ export const User={
         if(jRoles.golfer) aRoleGuidance.push(User.fnVerbiage(jRoles.golfer,Your)); 
 
         return `
-<p>
+<p data-section="Settings" title="Settings">
 <b>${Your.alias||"No alias"}</b>, 
 your fullname is <b>${Your.fullName||"unknown"}</b>,
 your account was created on <b>${Your.created||"unavailable"}</b>,
 you've logged in <b>${Your.logins||"0"}</b> times
 and your last login was <b>${Your.lastLogin||"never"}</b>.
 Your last known location was at the following coordinates (<b>${Your.location||"unknown"}</b>).
+
+<div class="warning">You are ${Your.jPreferences.showChangesMessage?"":"<b>NOT</b>"} showing <b>Change Warnings</b>!</div>
+
 </p>
-<p>
+<p data-section="Settings" title="Settings">
 Your Alias (<b>${jUser.alias}</b>) will always be shared, ${aSharing.join(", ")}.
+</p>
+<p data-section="Roles" title="Roles">
 Your roles include ${aRoles.join(", ")}.
-<p>${aRoleGuidance.join('<br/>')}</p>
+<br/>${aRoleGuidance.join('<br/>')}
+</p>
+<p data-section="Golfer" title="Golfer">
 You follow <b>${aCourses.join("</b>, <b>")}</b>.
 </p>
-<p>
+<p data-section="Settings" title="Settings">
 Your question is <b>${Your.question||"empty"}</b> and your answer is <b>${Your.secret||"empty"}</b>
 </p>
 `    
     }
+}
+export function fnPossessiveName(name){
+    name = name || "User";
+    return (name) +"'"+ (name.charAt(name.length-1)=='s'?"":"s");
 }
 function saveUser( drop ){
     if(drop) {
@@ -187,11 +215,13 @@ function saveUser( drop ){
     } 
     sessionStorage[sessionKey] = fnEncrypt(JSON.stringify({...jUser}))
 }
-export function fnChangesVerbiage(panelName){ return User.fnChangesVerbiage(panelName);}
+export function fnChangesVerbiage(panelName){ 
+    return User.fnChangesVerbiage(panelName);
+}
 export function fnGetUser(){
     if(!jUser.userid ){
         if( sessionStorage[sessionKey] ){
-            jUser = JSON.parse(fnDecrypt(sessionStorage[sessionKey]));
+            jUser = {...jNewUser,...JSON.parse(fnDecrypt(sessionStorage[sessionKey]))};
         }
         else{
             jUser = JSON.parse(JSON.stringify(jNewUser));

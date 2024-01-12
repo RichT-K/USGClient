@@ -72,7 +72,7 @@
         display:grid;
         padding:.5em;
         gap:2em;
-        outline:1px solid black;
+        outline:1px solid rgb(199, 199, 199);
         border-radius:5px;
     }
     .label{

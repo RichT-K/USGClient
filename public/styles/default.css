@@ -18,6 +18,16 @@
   --standard-width:500px;
   --input-radius:.2em;
 } 
+[data-section]:hover{
+  cursor:pointer;
+}
+[data-section] b:hover{
+  cursor:text;
+}
+.warning{
+  color:var(--warning-color);  
+  background-color:var(--warning-background-color);  
+}
 .sticky{position:sticky; top:var(--top-avoid-menu);}
 .flex{display:flex;}
 .grid{display:grid;}
@@ -37,6 +47,7 @@
 .justify-content-center{ justify-content:center; }
 .text-align-start{text-align:left;}
 .text-align-center{text-align:center;}
+.text-align-justify{text-align:justify;}
 .text-align-end{text-align:right;}
 .capitalize{ text-transform: capitalize; }
 .underline{ text-transform: underline; }
@@ -70,7 +81,19 @@ nav{
   display:flex;
   z-index:900;
   justify-content: center;
-  gap:2em;
+  padding:0em;
+  gap:0em;
+  background-color:white;
+  outline:1px solid rgb(218, 218, 218);
+}
+nav a{
+  padding:.6em 2vw .4em 2vw;
+  transition:padding .1s ease-in-out;
+}
+nav a:hover{
+  padding:.4em 2vw .6em 2vw;
+  text-shadow:1px 1px 2px rgb(112, 112, 112);
+  background-color:rgb(233, 233, 233);
 }
 .message-block{
   padding:.5em;
@@ -88,7 +111,7 @@ nav{
   justify-self: start;
   justify-content: start;
   gap:.5em;
-  padding:2em 0em;
+  padding:0em 0em;
   margin:2em 0em;
   background-color:var(--form-background-color);
   border-radius:var(--block-radius);

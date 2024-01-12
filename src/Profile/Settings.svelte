@@ -1,31 +1,14 @@
 <svelte:options customElement="usg-profile-settings" />
 <script>
-  import { parse } from 'svelte/compiler';
-    import {fnSettings,fnGetUser} from '/context/User';
+    import { onDestroy } from 'svelte';
+    import {fnGetUser} from '/context/User';
     let panelName = "Settings";
     let User = fnGetUser();
-    let U = {}
-    let policyNumber=1;
-    let msg = "";
-    function fnReset(){
-      U = {
-          ...JSON.parse(JSON.stringify(User.Settings)),
-          get About(){
-              return User.fnAbout(U);
-          }
-          ,policy:0
-      }
-    }
-    fnReset();
-    function onSubmit(){
-      msg = "";
-      if(!U.policy) return msg="Policy acceptance is necessary.";
-      U.policy = U.policy?policyNumber:0;
-      fnSettings(U);
-    }
+    let U = User.Settings;
+    onDestroy(()=>{User.Settings = U})
 </script>
-<p class="Verbiage">{@html User.fnChangesVerbiage(panelName)}</p>
-<form class="DOTTED" action="login" method="get" on:submit|preventDefault={onSubmit}>
+{@html User.fnChangesVerbiage(panelName)}
+<div class="DOTTED" >
     <label><span>ID</span><input type="text" size="{U.userid.length}" readonly name="userid" value="{U.userid}"/></label>    
     <label><span>Name</span><input type="text" size="{U.fullName.length}" readonly name="fullName" bind:value="{U.fullName}"/></label>    
     <label><span>Alias</span><input type="text" required name="alias" bind:value="{U.alias}"/></label>    
@@ -36,7 +19,11 @@
     </p>
     {/if}
     <div class="grid">
-      <div>Limit Information Shared</div>
+      <label><span class="capitalize">Show Changes Message ({User.showChangesMessage?"Yes":"no"})</span>
+        <input type="checkbox" name="Alias" bind:checked="{User.showChangesMessage}"/>
+      </label>
+
+      <div>Limit Information You Share</div>
         <label><span class="capitalize">Alias (Yes)</span><input disabled type="checkbox" name="Alias" checked="true"/></label>
       {#each Object.entries(U.jShares) as [share,value]}
           <label><span class="capitalize">{share} ({value?"Yes":"no"})</span><input type="checkbox" name="jShares.{share}" checked="{value?true:false}"
@@ -54,21 +41,7 @@
       <br><input type="text" required name="secret" maxlength="50" bind:value="{U.secret}"/>
     </label>
   </div>
-  <div class="about-you Verbiage ">
-    <div class="content">{@html U.About}</div>
-  </div>
-  <div class="grid">
-    <label>
-      <span>Accept Policy</span>
-      <input size=1 type="checkbox" required name="policy" bind:checked={U.policy} value="{policyNumber}"/>
-    </label>
-  </div>
-  <div>{msg}</div>
-  <div class="button-block">
-      <button type="submit">Update</button>
-      <button type="reset" on:click={fnReset}>Reset</button>
-  </div>
-</form>
+</div>
 <style>
   [readonly]{
     text-align:right;
@@ -86,6 +59,8 @@
     max-height:fit-content;
   }
   .about-you .content{
+    outline:1px solid rgb(219, 219, 219);
+    padding:.5em .5em;
     max-height:500px;
     overflow:auto;
     transition:all .3s ease;

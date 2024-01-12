@@ -1,12 +1,10 @@
 <svelte:options customElement="usg-profile-settings" />
 <script>
     import { onDestroy } from 'svelte';
-    import {fnSettings,fnGetUser} from '/context/User';
+    import {fnGetUser} from '/context/User';
     let panelName = "Settings";
     let User = fnGetUser();
     let U = User.Settings;
-    let policyNumber=1;
-    let msg = "";
     onDestroy(()=>{User.Settings = U})
 </script>
 {@html User.fnChangesVerbiage(panelName)}

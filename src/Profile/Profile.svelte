@@ -1,7 +1,7 @@
 <svelte:options customElement="usg-profile" />
 <script>
     import { onMount } from 'svelte';
-    import { fnGetUser } from "/context/User.ts";
+    import { fnSettings,fnGetUser } from "/context/User.ts";
     import Settings from "./Settings.svelte";
     import Login from "./Login.svelte";
     import Logout from "./Logout.svelte";

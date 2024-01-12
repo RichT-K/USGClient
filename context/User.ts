@@ -76,7 +76,7 @@ export const jNewUser = {
     ptLocation:"", 
     question:"",
     secret:"",
-    jShares:{ name:0, loggedin:0, location:0, shares:0, courses:0, roles:0, data:0 }, 
+    jShares:{ name:0, loggedin:0, location:0, shares:0, preferences:0, courses:0, roles:0, data:0 }, 
     jCourses:{}, 
     jRoles:{},
     jBank:{},

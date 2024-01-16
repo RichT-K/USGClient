@@ -1,6 +1,8 @@
 <svelte:options customElement="usg-template-component" />
 <script>
     import { onMount, onDestroy } from 'svelte';
+    //import {jWorld,fnLoadDemographics} from "/context/Courses";
+    export let something=false;
     onMount(()=>{
         // Local initialization
         console.log("CustomElement: usg-template-component");
@@ -9,16 +11,9 @@
         // Local clean up        
     });
 </script>
-<div>
-    <h1>Template Component</h1>
-    <p >
-        This Template component makes it easy to create a new Svelte component. 
-        It has the basic functionality and sections which can be stripped or augmented as needed.
-    </p>
+<div class="Template" >
+    Nothing Here
 </div>
 <style>
-    p{
-        margin:2em;
-    }
 </style>
     

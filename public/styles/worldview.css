@@ -1,0 +1,213 @@
+.WorldView a{
+    text-decoration: none;
+}
+.WorldView{
+    gap:1px;
+    width:80vw;
+    grid-template-columns: 20vw 1fr 10vw;
+    grid-template-rows: 80vh;
+    align-items: start;
+    justify-content: center;
+    outline:1px solid #c2c2c2;
+    margin:1vh 1vw;
+    padding:0vh 0vw;
+}
+.WorldView > *{
+    display:inherit;
+    outline:1px solid #c2c2c2;
+    height:100%;
+    overflow:auto;
+    align-items: start;
+    justify-items: center;
+}
+.WorldView .DropContainer{
+    position:relative;
+    display:grid;
+    grid-template-columns: 1fr;
+    align-content: start;
+    justify-content: center;
+    box-shadow:0px 0px 0px rgba(0, 0, 0, 0);
+    transition:box-shadow .1s ease;;
+}
+.WorldView .DropContainer.OVER{
+    box-shadow:2px 2px 30px black;
+}
+.WorldView .Panel{
+    position:relative;
+    display:grid;
+    grid-template-columns: 1fr;
+    width:100%;
+    justify-items: center;
+    align-content: stretch;
+}
+.WorldView .Panel .Header{
+    width:98%;
+    padding:.2em 1%;
+    position:sticky;
+    top:0;
+    display:grid;
+    grid-template-columns:auto 1fr auto;
+    z-index:111;
+    background-color: white;
+    justify-items: center;
+    align-items: center;
+    top:0px;
+    gap:1em;
+    list-style: none;
+}
+.WorldView .Panel .SubHeader{
+    font-size:.8em;
+    top: 0;
+    display: grid;
+    justify-content: center;
+    justify-self: stretch;
+    grid-template-columns: repeat(auto-fit, 12em);
+    gap: .2em;
+    z-index: 1112;
+    background-color: white;    
+}
+.WorldView .Panel .Flag{
+    cursor:unset;
+    margin:1vh;
+    outline:0px solid #c2c2c2;
+    box-shadow:0px 0px 15px rgba(51, 51, 51, 0.281);
+    padding:5px;
+    height:2.5vw;
+    width:fit-content;
+}
+.WorldView .Panel .Flag img{
+    border:1px solid black;
+    height:inherit;
+}
+.WorldView .Panel .Articles{
+    display:grid;
+    width:98%;
+    margin-top:1em;
+    padding:.2em 1%;
+    grid-template-columns:repeat(auto-fit,22em);
+    justify-content: center;
+    gap:.5vw;
+    font-size:.8em;
+}
+.WorldView article button.Focus{
+    position:absolute;
+    top:2px;
+    right:2px;
+    height:2em;
+    width:2em;
+}
+.WorldView .Panel .Articles article{
+    position:relative;
+    display:grid;
+    gap:.1em;
+    padding:.4em;
+    height:22em;
+    outline: 1px solid rgba(131, 131, 131, 0.671);
+    overflow:hidden;
+    background-color:white;
+    transition:all .3s ease-in-out;
+}
+.WorldView .Panel .Articles > article.OPENED{
+    position:absolute;
+    z-index:11111;
+    top:0px;
+    left:0px;
+    display: grid;
+    font-size: 1rem;
+    gap: 0.5rem;
+    margin:1%;
+    margin-top:6rem;
+    padding: 1em 1%;
+    height: unset;
+    min-height: 60vh;
+    width:96%;
+    overflow: unset;
+}
+.WorldView .Directory{
+    align-content: start;
+}
+.WorldView .Directory > .Header{
+    z-index:999;
+    display:inherit;
+    grid-template-columns:repeat(2,5vw) auto;
+    gap:.5vw;
+    cursor:pointer;
+    top:0px;
+    background-color:white;
+    text-align:center;
+    text-shadow:0px 0px 3px rgb(202, 202, 202);
+    margin:.5vw;
+    min-height:3vw;
+    max-height:5vw;
+}
+.WorldView .Directory > .Header > [data-transfer]{
+    min-height:3vw;
+    height:100%;
+    outline:1px solid #c2c2c2;
+}
+.WorldView .Directory > .Header > .City[data-transfer]{
+    grid-column-start: 1;
+    grid-column-end: 4;
+    min-height:1.5em;
+    max-height:1.5em;
+    height:1.5em;
+}
+.WorldView .Directory .List{
+    align-items: start;
+    display:inherit;
+    gap:.5vw;
+    grid-template-columns:repeat(2,8vw);
+}
+.WorldView .Directory > .List.World{
+    grid-template-columns:repeat(4,4vw);
+}
+.WorldView .Directory > .List.City{
+    grid-template-columns:1fr;
+    margin:auto;
+    margin-top:1.5em;
+    width:90%;
+}
+.WorldView .Flag, 
+.WorldView .List [data-transfer]{
+    cursor:pointer;
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+.WorldView .Flag, 
+.WorldView [data-transfer]{
+    outline:1px solid #c2c2c2;
+    height:100%;
+}
+.WorldView .City [data-transfer]{
+    background-color: #ffffff;
+    height:auto;
+}
+.WorldView [data-transfer].Country > div{
+    pointer-events: none;
+    padding:0em;
+    font-weight:bold;
+    color:white;
+    text-shadow:0px 0px 0px black;
+    transition:all .2s ease;
+    opacity:0;
+}
+.WorldView .World.Flag, 
+.WorldView [data-transfer].Region div{
+    color:black;
+    transition:all .2s ease;
+    opacity:.8;
+}
+.WorldView [data-transfer]:hover div{
+    padding:0em .2vw;
+    opacity:1;
+    text-shadow:0px 0px 2px rgb(110, 110, 110);
+}
+.WorldView .World.Flag:hover, 
+.WorldView [data-transfer].Region:hover > div, 
+.WorldView [data-transfer].City:hover > div{
+    padding:0em .2vw;
+    color:white;
+    opacity:1;
+    background-color: #5a4910;
+}

@@ -17,6 +17,8 @@
   --text-color:black;
   --standard-width:500px;
   --input-radius:.2em;
+  --closed-content-arrow:"≡";
+  --opened-content-arrow:"▲";
 } 
 [data-section]:hover{
   cursor:pointer;
@@ -158,5 +160,15 @@ form .button-block{
 }
 :not(.grid) .button-block, :not(.flex) .button-block{
   text-align:center
+}
+button.toggle-open:after{
+  display:block;
+  content:var(--closed-content-arrow);
+  transform:rotate(0deg);
+  transition: transform .5s ease;
+}
+.OPENED button.toggle-open:after{
+  content:var(--opened-content-arrow);
+  transform:rotate(-180deg);
 }
 

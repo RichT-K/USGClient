@@ -18,7 +18,7 @@ let Swapper={clientWidth:0},
     Thing1={clientWidth:0},
     Thing2={clientWidth:0};
 $:{ 
-    TwoColumn = Swapper.clientWidth > TwoColumnWidth;
+    //TwoColumn = TwoColumnWidth < Swapper.clientWidth;
 }
 let newsCycle=0;
 let F = new Feed("https://golfbusinessnews.com/feed/");
@@ -79,8 +79,8 @@ function fnDragend(thingId, effect){
     }
 }
 </script>
-<div class="Swapper {TwoColumn?"three-column":"two-column"} grid align-items-start justify-items-center "  bind:clientWidth={Swapper.clientWidth}>
-{#if TwoColumn}
+<div class="Swapper {TwoColumn?"two-column":"three-column"} grid align-items-start justify-items-center "  bind:clientWidth={Swapper.clientWidth}>
+{#if !TwoColumn}
 <div class="Things">
     {#each aThings1 as T}
     <Draggable id="{T.id}" Thing="{T}" {fnDragend}>

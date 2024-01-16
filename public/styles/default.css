@@ -17,6 +17,8 @@
   --text-color:black;
   --standard-width:500px;
   --input-radius:.2em;
+  --closed-content-arrow:"≡";
+  --opened-content-arrow:"▲";
 } 
 [data-section]:hover{
   cursor:pointer;
@@ -159,13 +161,15 @@ form .button-block{
 :not(.grid) .button-block, :not(.flex) .button-block{
   text-align:center
 }
-.TV{
-  border:0;
-  outline:1px solid rgb(131, 131, 131);
-  position:absolute;
-  left:5vw;
-  width:80vw!important;
-  height:60vh!important;
-  margin-bottom:10vh;
+button.toggle-open:after{
+  display:block;
+  content:var(--closed-content-arrow);
+  transform:rotate(0deg);
+  transition: transform .5s ease;
 }
+.OPENED button.toggle-open:after{
+  content:var(--opened-content-arrow);
+  transform:rotate(-180deg);
+}
+
 

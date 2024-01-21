@@ -1,3 +1,9 @@
+.WorldView small{
+    display:block;
+    font-size:6pt;
+    line-height:8pt;
+    text-transform:uppercase!important;
+}
 .WorldView a{
     text-decoration: none;
 }
@@ -170,9 +176,13 @@
 .WorldView .Flag, 
 .WorldView .List [data-transfer]{
     cursor:pointer;
+    background-color: #ffffff;
     background-position: center center;
     background-repeat: no-repeat;
-    background-size: cover;
+    background-size: contain;
+}
+.WorldView .Directory .Country{
+    min-height:64px;
 }
 .WorldView .Flag, 
 .WorldView [data-transfer]{
@@ -186,7 +196,6 @@
 .WorldView [data-transfer].Country > div{
     pointer-events: none;
     padding:0em;
-    font-weight:bold;
     color:white;
     text-shadow:0px 0px 0px black;
     transition:all .2s ease;
@@ -200,14 +209,11 @@
 }
 .WorldView [data-transfer]:hover div{
     padding:0em .2vw;
-    opacity:1;
+    opacity:.9;
     text-shadow:0px 0px 2px rgb(110, 110, 110);
 }
-.WorldView .World.Flag:hover, 
-.WorldView [data-transfer].Region:hover > div, 
-.WorldView [data-transfer].City:hover > div{
+.WorldView .World.Flag:hover, .WorldView [data-transfer]:hover > div{
     padding:0em .2vw;
     color:white;
-    opacity:1;
     background-color: #5a4910;
 }

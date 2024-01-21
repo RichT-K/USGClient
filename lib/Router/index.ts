@@ -4,6 +4,7 @@ import NotFound from '/src/components/NotFound.svelte';
 import Latest from '/src/components/Latest.svelte';
 import Profile from '/src/Profile/Profile.svelte';
 import WorldView from '/src/components/WorldView.svelte';
+import AppData     from '/src/components/AppData.svelte';
 
 export const PageHistory={
     get Pages(){
@@ -27,8 +28,9 @@ let path="/";
 
 let User = fnGetUser();
 export const Routes = {
-    [path]              :{text:"USGolfers ",  use:WorldView,     aProps:{User}},
+    [path]              :{text:"USGolfers",  use:Home,     aProps:{User}},
 }
+Routes[path="/world"] = {text:"World",  use:WorldView,     aProps:{User}};
 if(User.isLoggedIn){
     if( root == "/" || root == "/profile" ){
         Routes[path="/profile"] = {text:"Profile",       use:Profile,  aProps:{aPath}};
@@ -39,6 +41,7 @@ else{
     Routes[path="/profile/login"] = {text:"Login", use:Profile,  aProps:{aPath}};
 }
 Routes[path="/latest"] = {text:"Latest",      use:Latest,   aProps:{User}};
+Routes[path="/appdata"] = {text:"App Data",      use:AppData,   aProps:{}};
 
 let jRoutes = Routes;
 let Instance = NotFound;

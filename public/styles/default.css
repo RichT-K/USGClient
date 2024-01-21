@@ -44,9 +44,11 @@
 .justify-self-start{justify-self:start;}
 .justify-self-center{ justify-self:center; }
 .justify-items-start{ justify-items:start; }
+.justify-items-end{ justify-items:end; }
 .justify-items-center{ justify-items:center; }
 .justify-content-start{ justify-content:start; }
 .justify-content-center{ justify-content:center; }
+.justify-content-end{ justify-content:end; }
 .text-align-start{text-align:left;}
 .text-align-center{text-align:center;}
 .text-align-justify{text-align:justify;}

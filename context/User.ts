@@ -106,12 +106,30 @@ export const User={
     get About(){
         return this.fnAbout();
     },
-    get isaGolfer(){return this.isA("golfer");},
-    get isanAdmin(){return this.isA("admin");},
-    get isaUSGAdmin(){return this.isA("usgadmin");},
+    get isGolfer(){return this.isA("golfer");},
+    get isUSGAdmin(){return this.isA("usgadmin");},
+    get isEditor(){return this.isA("editor");},
+    get isWritor(){return this.isA("writer");},
+    get isReviewer(){return this.isA("reviewer");},
+    get isAdmin(){return this.isA("courseadmin");},
+    get isMapper(){return this.isA("mapper");},
+    get isPinSetter(){return this.isA("pinsetter");},
     isA(role){
-        if(jUser && jUser.jRoles)
-            return this.hasA.call(jUser.jRoles,role);
+        let jRole = this.getRole(role);
+        if(jRole) return jRole.requested?false:true;
+    },
+    getRole(role){
+        if(!jUser || !jUser.jRoles) return;
+        if(jUser.jRoles.usgadmin) return jUser.jRoles.usgadmin;
+        if( jUser.jRoles.editor && role.match(/editor|writer|reviewer/) )
+            return jUser.jRoles.editor;
+        if( jUser.jRoles.writer && role.match(/writer|reviewer/) )
+            return jUser.jRoles.writer;
+        if( jUser.jRoles.courseadmin && role.match(/courseadmin|mapper|pinsetter/) )
+            return jUser.jRoles.courseadmin;
+        if( jUser.jRoles.mapper && role.match(/mapper|pinsetter/) )
+            return jUser.jRoles.mapper;
+        return jUser.jRoles[role];
     },
     set Role(Role){
         /* the Role.type is jRoles member and the Role is the data */

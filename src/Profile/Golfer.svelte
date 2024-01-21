@@ -8,7 +8,7 @@
   let jGolfer = {
     ghin:"",
     handicap: 0,
-    ...User.isaGolfer,
+    ...User.isGolfer,
     set Handicap(value){
         let aValue = String(value).split("");
         aValue[0] = (aValue[0] == "+"?"-":aValue[0] == "-"?"":aValue[0]);
@@ -39,7 +39,7 @@
 <div class="DOTTED">
     <div class="Verbiage">
         {@html User.fnChangesVerbiage(panelName)}
-        {#if User.isaGolfer}
+        {#if User.isGolfer}
         <p>Adjust your handicap.</p>
         {:else}
         <p>Enter your GHIN and adjust your handicap.</p>
@@ -53,7 +53,7 @@
         <input 
             type="text" 
             required
-            readonly={User.isaGolfer?true:false} 
+            readonly={User.isGolfer?true:false} 
             name="ghin" 
             placeholder="GHIN Number"
             bind:value="{jGolfer.ghin}"/>

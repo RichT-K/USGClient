@@ -7,6 +7,8 @@
     password:"",
     fullName:"",
     alias:"",
+    social:"f",
+    socialId:"",
     policy:0,
     answer:"",
     resp:"",
@@ -37,6 +39,14 @@
         }
     })
   }
+  let jSocials={
+    f:"Facebook",
+    x:"Xtwitter",
+    i:"Instagram"
+  }
+  function fnCycleSocial(){
+    U.social = U.social=="f"?"x":U.social=="x"?"i":"f";
+  }
 </script>
 {#if User.isLoggedIn}
 <div class="warning">Warning : Your current session will be reset!</div>
@@ -58,6 +68,16 @@
     <label title="Valid Chars: {aInputPatterns.password}" ><span>Password(8-16 chars)</span><input type="password" name="password" pattern="{aInputPatterns.password}" minlength=8 maxlength=16 bind:value="{U.password}" placeHolder="Password" /></label> 
     <label title="Valid Chars: {aInputPatterns.fullName}" ><span>Fullname(2+ names, A-Z,4-64 A-9\-)</span><input type="text" name="fullName" pattern="{aInputPatterns.fullName}" minlength=4 maxlength=64 bind:value="{U.fullName}" placeHolder="Full Name" /> </label>
     <label title="Valid Chars: {aInputPatterns.alias}"><span>Alias(1 name,1 A-Z,-16 A-9)</span><input type="text" name="alias" pattern="{aInputPatterns.alias}" minlength=2 maxlength=16 bind:value="{U.alias}" placeHolder="Alias" /> </label>
+    <label title="Valid Chars: A-Za-z0-9.-">
+      <span >
+        <a href class="pointer" 
+        title="Facebook, X-Twitter or Instagram"
+          on:click|preventDefault="{fnCycleSocial}">
+          <i>{jSocials[U.social||"f"]} ID</i>
+          <i>(A-Za-z0-9.-)</i>
+        </a>
+      </span>
+      <input type="text" name="socialId" pattern="{`[A-Za-z0-9\\.\\-]*`}" minlength=2 maxlength=32 bind:value="{U.socialId}" placeHolder="{jSocials[U.social||"f"]} Social ID" /> </label>
     <label title="Your question(max. 100 chars) to confirm it's you?">
       <span>Question(max. 100 chars) to confirm it's you?</span>
       <br><input type="text" name="question" maxlength="100" bind:value="{U.question}"/>
@@ -99,6 +119,9 @@
     </div>
 </form>
 <style>
+  .pointer{
+    cursor:pointer;
+  }
 .Verbiage{
   max-width:500px;
 }

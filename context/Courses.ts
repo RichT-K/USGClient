@@ -94,13 +94,13 @@ async function fLoad(jFields,jQuery,jCache,fnStore){
                     if(element.jData){
                         jData.order = element.jData.courses;
                         jData.jCourseTypes = element.jData.jCourseTypes;
-
+                        jData.aByHoles = element.jData.aByHoles;
                     }
                     if(element.jCourses){
                         Object.entries(element.jCourses).forEach((X)=>{
                             X[1].lat=X[1].avgLat;X[1].lng=X[1].avgLng;
                         })
-                        //jData.jCourses  = element.jCourses;
+                        jData.jCourses  = element.jCourses;
                     }
                     jCache.jData = fnStore(jCache.jData,jData,element);
                 });
@@ -120,14 +120,16 @@ export async function fnLoadDemographics(jQuery){
         region:jQuery.regionid,
         city:jQuery.cityid,
     }
-    jFields.cache = jQuery.cache == undefined?("World|"+Object.entries(jFields).filter(f=>(f[1]?f:undefined)).join("|")):jQuery.cache;
+    jQuery.cache = jFields.cache = jQuery.cache == undefined?("World|"+Object.entries(jFields).filter(f=>(f[1]?f:undefined)).join("|")):jQuery.cache;
 
     return await fLoad(
         jFields,
         jQuery,
         jWorld,
-        (jCountries,jData,element)=>{
+        (jCountries,jData,jElement)=>{
             if(!jData.countryid){
+                jWorld.jCourses=jElement.jCourses;
+                jWorld.aByHoles=jData.aByHoles;
                 jWorld.jCourseTypes=jData.jCourseTypes;
                 if(!jWorld.courses ){
                     jWorld.courses=0;
@@ -148,7 +150,11 @@ export async function fnLoadDemographics(jQuery){
             sessionStorage["USG-jWorld"] = JSON.stringify(jWorld);
         }
         if(!jQuery.countryid){
-            jQuery.aBounds = jWorld.aBounds;
+            jQuery.aBounds      = jWorld.aBounds;
+            jQuery.courses      = jWorld.courses;
+            jQuery.jCourses     = jWorld.jCourses;
+            jQuery.aByHoles     = jWorld.aByHoles;
+            jQuery.jCourseTypes = jWorld.jCourseTypes;
             return jCountries;
         }
 
@@ -224,4 +230,53 @@ export async function fnLoadDemographics(jQuery){
     },(jObj)=>{
         console.log("Final jError?:",jObj);
     });
+}
+export async function fnAppData(jFields){
+    jFields.query="application";
+    return new Promise((resolve)=>{
+        var jPacket = {
+            url : "/api/submit.asp",
+            method : "POST",
+            action : "query",
+            jForm : {
+                action : "query",
+                pageSize : 500,
+                ...jFields,
+            }
+        };
+        postPacketPromise(jPacket)
+        .then((jResp)=>{
+            if(jFields.key)
+                resolve(jResp.aResults);
+            else
+                resolve(jResp.jQueries);
+        });
+    })
+
+}
+export async function fnGetCourseHead(jFields){
+    jFields.query="application";
+    return new Promise((resolve)=>{
+        var jPacket = {
+            url : "/api/submit.asp",
+            method : "POST",
+            action : "get-course-head",
+            jForm : {
+                action : "get-course-head",
+                pageSize : 500,
+                jFields
+            }
+        };
+        postPacketPromise(jPacket)
+        .then( (jResp)=>{
+            let f = document.createElement("div");
+            f.innerHTML=jResp.content;
+            let USG = f.querySelector(`meta[property="usg:course"]`);
+            if(USG){
+                console.log(USG.getAttribute("content"))
+                return USG.getAttribute("content");
+            }
+            return "";
+        })
+    })
 }

@@ -40,7 +40,6 @@ if(User.isLoggedIn){
 else{
     Routes[path="/profile/login"] = {text:"Login", use:Profile,  aProps:{aPath}};
 }
-Routes[path="/latest"] = {text:"Latest",      use:Latest,   aProps:{User}};
 Routes[path="/appdata"] = {text:"App Data",      use:AppData,   aProps:{}};
 
 let jRoutes = Routes;

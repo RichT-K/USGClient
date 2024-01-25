@@ -14,6 +14,9 @@
     let jEdits = {
         _tag:"",
         _date : new Date(jArticle.date||Date()).toGMTString().substr(0,16),
+        _approved:"",
+        ordinal:1,
+        series:"",
         jSeries: jArticle.jSeries?{...jArticle.jSeries}:undefined, 
         aTags: [...(jArticle.aTags||[])],
         Card:{
@@ -23,6 +26,9 @@
         Full:{
             title:jArticle.title,
             content:jArticle.content
+        },
+        get status(){
+            return jEdits._approved ? "APPROVED" : "PENDING";
         },
         get date(){ return new Date(jEdits._date).toGMTString().substr(0,16);},
         set date(val){ 
@@ -40,49 +46,75 @@
         set cardContent(content){jEdits.Card.content = content;},
         set content(content){jEdits.Full.content = content;},
 
+        get hasPriorApproval(){
+            let priorApproval = false;
+            for(let s in jEdits.jSeries){
+                if(s == jEdits.series) break;
+                priorApproval = jEdits.jSeries[s]._approved;
+            }
+            return priorApproval;
+        },
         get tag(){ return jEdits._tag;},
         get cardTitle(){return jEdits.Card.title;},
         get title(){return jEdits.Full.title;},
         get cardContent(){return jEdits.Card.content;},
         get content(){return jEdits.Full.content;},
-    }
-    function fnAddTag(ev){
-        if(ev.code !== "Enter") return;
-        let tag = jEdits.tag.toLowerCase().replace(/[^a-z ]|(  )/g,"").trim();
-        if( tag.length > 5 && jEdits.aTags.findIndex((t)=>{ return t == tag;}) < 0){
-            jEdits.aTags.push(tag);
-            jEdits.tag="";
+        fnAddTag(ev){
+            if(ev.code !== "Enter") return;
+            let tag = jEdits.tag.toLowerCase().replace(/[^a-z ]/g,"").trim();
+            if( tag.length > 3 && jEdits.aTags.findIndex((t)=>{ return t == tag;}) < 0){
+                jEdits.aTags.push(tag);
+                jEdits.tag="";
+                jEdits = jEdits;
+            }
+        },
+        fnNewInSeries(ev){
+            let jTemp = jEdits.jSeries[jEdits.series]||{};
+            console.log("fnNewInSeries:",jTemp)
+            jEdits.seriesid = jEdits.articleid;
+            jTemp.ordinal = jEdit.ordinal++;
+            jTemp.date  = jEdits.date;
+            jTemp.aTags = [...jEdits.aTags];
+            jTemp.Card  = {...jEdits.Card};
+            jTemp.Full  = {...jEdits.Full};
+            jEdits.jSeries[jEdits.series] = jTemp;
             jEdits = jEdits;
-        }
-    }
-	let cardElement,fullElement;
-	let editor;
-	let bubbleMenu;
-
-    onMount(fnNewEditor);
-    onDestroy(()=>{
-        if(editor) editor.destroy();      
-    });
-    let View={
-        _size:"Card",
-        _sizeIndex:0,
-        _aSizes:["Card","Full"],
-        get size(){return View._size;},
-        get nextSize(){return View._aSizes[(View._sizeIndex+1)%View._aSizes.length];},
-        get editorOptions(){
-            return View._size=="Card" 
-                    ? {element:cardElement,content:jEdits.cardContent}
-                    :  {element:fullElement,content:jEdits.content};
+            fnNewEditor();
+        },
+        fnSeriesChange(){
+            let jTemp = jEdits.jSeries[jEdits.series];
+            console.log("fnSeriesChange:",jTemp)
+            jEdits._approved  = jTemp._approved || "";
+            jEdits.articleid  = jTemp.seriesid;
+            jEdits.date  = jTemp.date;
+            jEdits.aTags = [...jTemp.aTags];
+            jEdits.Card  = jTemp.Card;
+            jEdits.Full  = jTemp.Full;
+            jEdits = jEdits;
+            fnNewEditor();
+        },
+        fnToggleSeries(){
+            if(!jEdits.jSeries){
+                jEdits.jSeries = {};
+                jEdits.fnNewInSeries();
+            }
+            else{
+                jEdit.ordinal = 1;
+                jEdits.articleid = jEdits.jSeries[""].seriesid;
+                jEdits.aTags = jEdits.jSeries[""].aTags;
+                jEdits.Card  =jEdits.jSeries[""].Card;
+                jEdits.Full  =jEdits.jSeries[""].Full;
+                jEdits.jSeries = undefined;
+            }
+            jEdits=jEdits; 
         },
         get canSave(){ 
-            return User.isA("author") ? true : false;
-        },
-        fnToggle(){ 
-            if(View._size=="Card"){ jEdits.cardContent = editor.getHTML(); }
-            else if(View._size=="Full"){ jEdits.content = editor.getHTML(); }
-            View._size = View.nextSize; View._sizeIndex++; View = View;
-            jEdits=jEdits;
-            fnNewEditor();
+            return User.canSaveArticle
+                    && jEdits.title 
+                    && jEdits.cardTitle
+                    && jEdits.content 
+                    && jEdits.cardContent
+                    ? true : false;
         },
         fnSave(){
             if( !User.isA("author") ) return View.fnCancel();
@@ -113,6 +145,33 @@
             onCancel ? onCancel() : undefined;
         }
     }
+	let cardElement,fullElement;
+	let editor;
+	let bubbleMenu;
+
+    onMount(fnNewEditor);
+    onDestroy(()=>{
+        if(editor) editor.destroy();      
+    });
+    let View={
+        _size:"Card",
+        _sizeIndex:0,
+        _aSizes:["Card","Full"],
+        get size(){return View._size;},
+        get nextSize(){return View._aSizes[(View._sizeIndex+1)%View._aSizes.length];},
+        get editorOptions(){
+            return View._size=="Card" 
+                    ? {element:cardElement,content:jEdits.cardContent}
+                    :  {element:fullElement,content:jEdits.content};
+        },
+        fnToggle(){ 
+            if(View._size=="Card"){ jEdits.cardContent = editor.getHTML(); }
+            else if(View._size=="Full"){ jEdits.content = editor.getHTML(); }
+            View._size = View.nextSize; View._sizeIndex++; View = View;
+            jEdits=jEdits;
+            fnNewEditor();
+        }
+    }
     function fnNewEditor(){
         if(editor) editor.destroy();      
 
@@ -127,42 +186,51 @@
             //console.log('editor html', editor.getHTML());
 		});
     }
-    function fnToggleSeries(){
-        jEdits.jSeries = jEdits.jSeries?undefined:{};
-        jEdits=jEdits; 
-    }
-    function fnAddSeries(){
-
-    }
 </script>
 <div class="Article">
     <div class="Editor {View.size}" >
         <div>
-            <span>Series: <input type="checkbox" checked="{jEdits.jSeries}" on:change="{fnToggleSeries}"/></span>
+            <span><b>{jEdits.status}</b> Series: <input type="checkbox" checked="{jEdits.jSeries}" on:change="{jEdits.fnToggleSeries}"/></span>
             {#if jEdits.jSeries}
                 <input class="Series" 
                     type="text" 
-                    placeholder="Series:{jEdits.Series}" 
+                    placeholder="Series:{jEdits.series}" 
                     bind:value={jEdits.series}
                 /> 
                 {#if jEdits.series}
-                <button >&gt;&gt;</button>
+                    <button disabled="{!jEdits.hasPriorApproval}" on:click="{jEdits.fnNewInSeries}">&gt;&gt;</button>
                 {/if}
-                <select name="Series" bind:value="{jEdits.series}">
-                    <option value="">(Synopsis & Intro)</option>
+                <select name="Series" bind:value="{jEdits.series}" on:change={jEdits.fnSeriesChange}>
+                    {#if !jEdits.jSeries[""]}
+                    <option value="">(Key Article)</option>
+                    {/if}
                     {#each Object.entries(jEdits.jSeries) as [name,jArticle]}
-                    <option value="{name}">{name}</option>
+                    <option value="{name}">#{jArticle.ordinal}) {name||"(Key Article)"}</option>
                     {/each}
                 </select>
-                <div>The unnamed component in the series is considered to be representative of the synoposis and the introdution. 
-                    Named components are Chapters, Segments, etc. 
+                <div>
+                    {#if !jEdits.series} This is the first of the series, the
+                        Key Article which the others in this series are linked to.
+                    {:else}You are editing "{jEdits.series}" in the series. 
+                    <br>WARNING: If you uncheck the series, only the Key Article will remain
+                    and all other edits associated with the series will be lost.
+                    {/if}
+                </div> 
+                <div>Each in a Series or its modification requires Editor approval before another may be added.
+                    Save equates to a modification whether or not there are changes, thus requiring re-approval.
+                    When Saving, only the one currently being edited in the Series is Saved.
                 </div> 
             {:else}
-                <div>You are composing a singular piece. It can be made a series if you like.</div> 
+                <div>You are composing a singular piece. It can be made a series at any time.
+                    Articles auto-publish after Editor's approval. 
+                    Save equates to a modification whether or not there are changes, thus requiring re-approval.
+                    Modifications to an Article await Editor approval
+                    before re-publication.
+                </div> 
             {/if}
         </div>
         <div class="CardArticle">
-            <div><input class="cardTitle" minlength=6 maxlength=32 type="text" 
+            <div><input class="cardTitle" minlength=2 maxlength=32 type="text" 
                 placeholder="{jEdits.series||""} Short Title:{jArticle.cardTitle||""}" bind:value="{jEdits.cardTitle}"/></div>
             <div class="Author">
                 <span>by {jArticle.author||""}</span>
@@ -173,20 +241,24 @@
                     <input type="date" bind:value={jEdits.dateISO}/>
                     {/if}
                 </span>
+                <button class:size={View.size} on:click={View.fnToggle}>{View.nextSize}</button>
+                <span class="float-right">
+                    <button on:click={jEdits.fnCancel}>Cancel</button>
+{#if jEdits.canSave }
+                    <button on:click={jEdits.fnSave}>Save</button>
+{/if}
+                </span>
             </div>
             <div><input class="Tags" type="text" 
                 placeholder="Tags:{jEdits.aTags.join(",")}" 
                 bind:value={jEdits.tag}
-                on:keypress={fnAddTag}
+                on:keypress={jEdits.fnAddTag}
                 /> 
+                <button on:click={()=>{jEdits.aTags.splice(1);jEdits=jEdits}}>Empty</button>
             </div>
 {#if OPENED}
             <div class="wrapper">
                 <EditorMenu {editor} >
-                    <div class="flex float-right">
-                        <button on:click={View.fnCancel}>Cancel</button>
-                        <button class:size={View.size} on:click={View.fnToggle}>{View.nextSize}</button>
-                    </div>
                 </EditorMenu>
                 <div class="element-wrapper" bind:this={cardElement}></div>
             </div>
@@ -195,21 +267,21 @@
 {#if OPENED}
         <div class="FullArticle">
             <div><input 
-                class="Title" type="text"  minlength=16 maxlength=64 
+                class="Title" type="text"  minlength=2 maxlength=64 
                 placeholder="{jEdits.series||""} Full Title:{jArticle.title||""}" bind:value="{jEdits.title}"/></div>
             <div class="Author">
                 <span>by {jArticle.author}</span>
                 <span>{jEdits.date}</span>
+                <button class:size={View.size} on:click={View.fnToggle}>{View.nextSize}</button>
+                <span class="float-right">
+                    <button on:click={jEdits.fnCancel}>Cancel</button>
+{#if jEdits.canSave }
+                    <button on:click={jEdits.fnSave}>Save</button>
+{/if}
+                </span>
             </div>
             <div class="wrapper">
                 <EditorMenu {editor} >
-                    <div class="flex float-right">
-    {#if View.canSave }
-                        <button on:click={View.fnSave}>Save</button>
-    {/if}
-                        <button on:click={View.fnCancel}>Cancel</button>
-                        <button class:size={View.size} on:click={View.fnToggle}>{View.nextSize}</button>
-                    </div>
                 </EditorMenu>
                 <div  class="element-wrapper" bind:this={fullElement}></div>
             </div>
@@ -239,7 +311,7 @@
     width:50em;    
 }
 .Tags{
-    width:50em;    
+    width:20em;    
 }
 .CardArticle .wrapper {
     font-size:.8em;
@@ -253,6 +325,7 @@
 }
 .CardArticle, .FullArticle{
     display:none;
+    min-width:400px;
 }
 .Full .FullArticle,.Card .CardArticle{
     display:grid;

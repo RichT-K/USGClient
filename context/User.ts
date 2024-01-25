@@ -1,4 +1,5 @@
 import { postPacketPromise } from "/lib/forms";
+import { Articles } from "/context/Articles";
 function fnEncrypt(str){
     let key = Math.ceil(Math.random()*96)+32;
     let c = String.fromCharCode(key);
@@ -106,10 +107,15 @@ export const User={
     get About(){
         return this.fnAbout();
     },
+    get canSaveArticle(){
+        return this.isWriter
+            && !Articles.rejected
+            && !Articles.pending;
+    },
     get isGolfer(){return this.isA("golfer");},
     get isUSGAdmin(){return this.isA("usgadmin");},
     get isEditor(){return this.isA("editor");},
-    get isWritor(){return this.isA("writer");},
+    get isWriter(){return this.isA("writer");},
     get isReviewer(){return this.isA("reviewer");},
     get isAdmin(){return this.isA("courseadmin");},
     get isMapper(){return this.isA("mapper");},
@@ -117,6 +123,10 @@ export const User={
     isA(role){
         let jRole = this.getRole(role);
         if(jRole) return jRole.requested?false:true;
+    },
+    get domain(){
+        if( !this.isWriter) return "";
+        return this.getRole("writer").domain || "";
     },
     getRole(role){
         if(!jUser || !jUser.jRoles) return;

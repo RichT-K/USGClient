@@ -8,8 +8,8 @@
             "courseadmin"   :{ jCourses:{courseid:"", domain:""},description:"The domain for each course you'll administer."},
             "mapper"        :{ courseid:"",description:"Responsible for mapping the course and may set pins."},
             "pinsetter"     :{ courseid:"",description:"Responsible setting regular pin placements."},
-            "editor"        :{ pseudonym:"",description:"Editors create story ideas and content and offer comments for improvement."},
-            "writer"        :{ pseudonym:"",description:"Research and create article content."},
+            "editor"        :{ pseudonym:"",domain:"",description:"Editors create story ideas and content and offer comments for improvement."},
+            "writer"        :{ pseudonym:"",domain:"",description:"Research and create article content."},
             "reviewer"      :{ description:"Provide feedback on articles, suggest improvements and makes a recommendations."},
             "podcast"       :{ description:"Provide access and content to a periodic podcast."},
             "producer"      :{ description:"Provide access and content to individual video content."},
@@ -91,7 +91,7 @@
         </div>
         <div class="ObjectMembers">
         {#each Object.entries(Role) as [field,value]}
-            {#if field.match(/ghin|handicap|pseudonym/) }
+            {#if field.match(/ghin|handicap|pseudonym|domain/) }
             <div class="label">
                 <span>{field}</span>
                 <input bind:value={Role[field]}/>

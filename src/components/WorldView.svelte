@@ -12,13 +12,14 @@
     let aWritersCategories=[
         {name:"Tee Times",checked:false,get hideWhen(){return !jPanelData.courseid},get canAdd(){ return User.isA("writer")}},
         {name:"Corrections",checked:false,get hideWhen(){return !User.isLoggedIn},get canAdd(){ return jPanelData.courseid && User.isA("writer") }},
-        {name:"Golf News",checked:false,get canAdd(){ return User.isA("writer")}},
-        {name:"Golf Tour",checked:false,get canAdd(){ return User.isA("writer")}},
-        {name:"Golf History",checked:false,get canAdd(){ return User.isA("writer")}},
-        {name:"Golf Fiction",checked:false,get canAdd(){ return User.isA("writer")}},
+        {name:"News",checked:false,get canAdd(){ return User.isA("writer")}},
+        {name:"Tours",checked:false,get canAdd(){ return User.isA("writer")}},
+        {name:"History",checked:false,get canAdd(){ return User.isA("writer")}},
+        {name:"Players",checked:false,get canAdd(){ return User.isA("writer")}},
+        {name:"Architects",checked:false,get canAdd(){ return User.isA("writer")}},
+        {name:"Fiction",checked:false,get canAdd(){ return User.isA("writer")}},
         {name:"Pod Casts",checked:false,get canAdd(){ return User.isA("writer")}},
         {name:"Destinations",checked:false,get canAdd(){ return User.isA("writer")}},
-        {name:"Players",checked:false,get canAdd(){ return User.isA("writer")}},
         {name:"Equipment",checked:false,get canAdd(){ return User.isA("writer")}},
         {name:"Fly Overs",checked:false,get canAdd(){ return User.isA("writer")}}
     ];
@@ -309,15 +310,15 @@
 {#if true}
                         <div class="flex Rating">
                             <span>Rate:</span>
-                            <label>1 <input name="rating{Category.name}" type="radio" value={1} bind:group={Category.rating} /></label>
-                            <label>2 <input name="rating{Category.name}" type="radio" value={2} bind:group={Category.rating} /></label>
-                            <label>3 <input name="rating{Category.name}" type="radio" value={3} bind:group={Category.rating} /></label>
-                            <label>4 <input name="rating{Category.name}" type="radio" value={4} bind:group={Category.rating} /></label>
-                            <label>5 <input name="rating{Category.name}" type="radio" value={5} bind:group={Category.rating} /></label>
+                            <label><span>1</span><input name="rating{Category.name}" type="radio" title="1" value={1} bind:group={Category.rating} /></label>
+                            <label><span>2</span><input name="rating{Category.name}" type="radio" title="2" value={2} bind:group={Category.rating} /></label>
+                            <label><span>3</span><input name="rating{Category.name}" type="radio" title="3" value={3} bind:group={Category.rating} /></label>
+                            <label><span>4</span><input name="rating{Category.name}" type="radio" title="4" value={4} bind:group={Category.rating} /></label>
+                            <label><span>5</span><input name="rating{Category.name}" type="radio" title="5" value={5} bind:group={Category.rating} /></label>
                         </div>
 {/if}
                     <div class="Verbiage">
-                        Retrieved a <b>{Category.name}</b> article<br> 
+                        Retrieved <b>{Category.name}</b> article<br> 
         {#if jPanelData.courseid}
                         specifically for <br><b>{jPanelData.name}</b>
         {:else}
@@ -367,6 +368,14 @@
         right:0px;
         bottom:0px;
         background-color:white;
+        display:grid;
+        gap:.5em;
+        grid-auto-flow: column;
+    }
+    .Rating label{
+        display:grid;
+        gap:0px;
+        grid-auto-flow: column;
     }
     .Rating:hover,.Rating:active,.Rating:focus{
         background-color:rgb(198, 255, 238);

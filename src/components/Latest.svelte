@@ -10,39 +10,66 @@
     });
 </script>
 <div>
-    <h1>Latest Work</h1>
+    <h1>Next Up</h1>
     <p>
-        After writing a good bit of the NextUp and History component I remembered that GitHub has a very nice Project 
-        area which I can also query. So I canned the NextUp and will build the Project query at another time.
-        Though, I did create a "nextup-component" branch to preserve the work which may come in handy.
-        So, I am back at the real work of this project - the USGolfers Web Application employing Svelte components.
     </p>
     <h4>USGClient:</h4>
         <ul>
-            <li>Added Register, Login, Logout and ForgotPassword with Routing Local To Profile</li>
-            <li>Added Handlers in the User for sessionStorage and USGServer interfacing</li>
-            <li>Added Settings component to allow editing Profile fields</li>
-            <li>Added basic sharing flags for FullName, Location, Courses, Roles and Sharing</li>
-            <li>Added a verbiage about the User using their settings.</li>
-            <li>Added Question and Answer fields each user can ask and change to verify them self.</li>
+            <li>Save/Get/Edit Article</li>
             <li></li>
+            <li>meta:property="usg-o" content="user's unique id"</li>
+            <li>meta:property="usg-o-author" content="name or pseudonym"</li>
+            <li>meta:property="usg-o-date" content="date associated with the article"</li>
+            <li>meta:property="usg-o-length" content="integer - must be equal to the character length of the innerHTML of the body"</li>
+            <li>meta:property="usg-o-category" content="a singular phrase"</li>
+            <li>meta:property="usg-o-tags" content="comma delimited set"</li>
+            <li>meta:property="usg-o-rating" content="1 to 100 where 1 is benign 100 is horrific"</li>
+            <li>meta:property="usg-o-series" content="numeric ordinal value 1 through n"</li>
+            <li>meta:property="usg-o-previous" content="link to a prior article"</li>
+            <li>meta:property="usg-o-next" content="link to another article"</li>
+            <li>meta:property="usg-o-group" content="the article's group name"</li>
+            <li>meta:property="usg-o-groupid" content="identifier associated with the group"</li>
+            <li>meta:property="usg-o-geo" content="lng,lat"</li>
+            <li>meta:property="usg-o-radius" content="numeric km"</li>
+            <li>meta:property="usg-o-bounds" content="[[n,w],[s,e]]"</li>
+            <li></li>
+            <li>All element attributes will be removed: style, class, etc</li>
+            <li>The structure of the body</li>
+            <li><pre>{
+`<article>
+    <section>
+        Content Preview (html okay)
+    </section>
+    <section>
+        Full Content (html okay)
+    </section>
+</article>`
+}
+</pre>
+</li>
+            <li>Server: Validation Prototypes</li>
         </ul>
     <h4>USGServer:</h4>
         <ul>
-            <li>Added a FormProcesser to respond to Submissions</li>
-            <li>Added handlers to communicate with USGAPI</li>
-            <li>Added code/answer for registration confirmation applying question/secret for password regeneration.</li>
             <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li>Validation Prototypes</li>
         </ul>
     <h4>USGAPI:</h4>
         <ul>
-            <li>Added entry points to process USGServer requests</li>
-            <li>Created a User Table and SQL interfacing</li>
-            <li>Used the existing Database Interface</li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
             <li></li>
         </ul>
 </div>
 <style>
+    ul{
+        list-style: none;;
+    }
     p{
         max-width:600px;
         margin:2em;

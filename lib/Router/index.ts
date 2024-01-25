@@ -5,6 +5,7 @@ import Latest from '/src/components/Latest.svelte';
 import Profile from '/src/Profile/Profile.svelte';
 import WorldView from '/src/components/WorldView.svelte';
 import AppData     from '/src/components/AppData.svelte';
+import QWriter from '/src/components/QWriter.svelte';
 
 export const PageHistory={
     get Pages(){
@@ -31,6 +32,7 @@ export const Routes = {
     [path]              :{text:"USGolfers",  use:Home,     aProps:{User}},
 }
 Routes[path="/world"] = {text:"World",  use:WorldView,     aProps:{User}};
+Routes[path="/quantumwriter"] = {text:"Quantum Writer",  use:QWriter, aProps:{}};
 if(User.isLoggedIn){
     if( root == "/" || root == "/profile" ){
         Routes[path="/profile"] = {text:"Profile",       use:Profile,  aProps:{aPath}};
@@ -40,6 +42,7 @@ if(User.isLoggedIn){
 else{
     Routes[path="/profile/login"] = {text:"Login", use:Profile,  aProps:{aPath}};
 }
+Routes[path="/latest"] = {text:"Latest",      use:Latest,   aProps:{User}};
 Routes[path="/appdata"] = {text:"App Data",      use:AppData,   aProps:{}};
 
 let jRoutes = Routes;

@@ -89,13 +89,11 @@ async function fnVerifyPath(ev){
             if(key !== "path") return;
             try{
                 let Doc = new window.DOMParser().parseFromString(jResp.content, "text/xml");
-                let Tags = Doc.querySelectorAll("[ns=quantum]");
+                let Tags = Doc.querySelectorAll("meta[property=quantum]");
                 Tags.forEach((Node)=>{
-                    if(Node.tagName == "meta:property"){
-                        let name = Node.getAttribute("name").substr(3);
-                        if(QW[name] !== undefined){
-                            QW[name] = Node.getAttribute("content");
-                        }
+                    let name = Node.getAttribute("name").substr(3);
+                    if(QW[name] !== undefined){
+                        QW[name] = Node.getAttribute("content");
                     }
                 })
             }catch(e){
@@ -180,46 +178,46 @@ async function fnVerifyPath(ev){
     <span><button on:click={fnCopyMeta}>Copy</button></span>
     <code class="pre-line">
 &lt;!-- The following meta tags determine the fate of your exposure: --&gt;
-&lt;meta:property ns="quantum" name="qw-authorid" content="{QW.authorid}"/&gt;
-&lt;meta:property ns="quantum" name="qw-date" content="{QW.date}"/&gt;
-<span style="{QW.length?"":`background-color:orange`}">&lt;meta:property ns="quantum" name="qw-length" content="{QW.length}"/&gt;</span>
-<span style="{`background-color:hsl(${(100-QW.rating)},100%,50%)`}">&lt;meta:property ns="quantum" name="qw-rating" content="{QW.rating}"/&gt;</span>
-<span style="{QW.pathTested?"":`background-color:orange`}">&lt;meta:property ns="quantum" name="qw-path" tested="{QW.pathTested}" content="{QW.path}"/&gt;</span><br/>
+&lt;meta property="quantum" name="qw-authorid" content="{QW.authorid}"/&gt;
+&lt;meta property="quantum" name="qw-date" content="{QW.date}"/&gt;
+<span style="{QW.length?"":`background-color:orange`}">&lt;meta property="quantum" name="qw-length" content="{QW.length}"/&gt;</span>
+<span style="{`background-color:hsl(${(100-QW.rating)},100%,50%)`}">&lt;meta property="quantum" name="qw-rating" content="{QW.rating}"/&gt;</span>
+<span style="{QW.pathTested?"":`background-color:orange`}">&lt;meta property="quantum" name="qw-path" tested="{QW.pathTested}" content="{QW.path}"/&gt;</span><br/>
 
 {#if QW.author || QW.category || QW.keywords}
 &lt;!-- These meta tags will help in distinguishing your contributions : --&gt;<br/>
     {#if QW.author}
-&lt;meta:property ns="quantum" name="qw-author" content="{QW.author}"/&gt;<br/>
+&lt;meta property="quantum" name="qw-author" content="{QW.author}"/&gt;<br/>
     {/if}
     {#if QW.category}
-&lt;meta:property ns="quantum" name="qw-category" content="{QW.category}"/&gt;<br/>
+&lt;meta property="quantum" name="qw-category" content="{QW.category}"/&gt;<br/>
     {/if}
     {#if QW.keywords}
-&lt;meta:property ns="quantum" name="qw-keywords" content="{QW.keywords}"/&gt;<br/>
+&lt;meta property="quantum" name="qw-keywords" content="{QW.keywords}"/&gt;<br/>
     {/if}
 {/if}
 
 {#if QW.series || (QW.group && QW.groupid) || (QW.point && QW.radius) || QW.bounds}
 &lt;!-- And these meta tags will help to identify and traverse your contributions : --&gt;<br/>        
     {#if QW.series}
-&lt;meta:property ns="quantum" name="qw-series" content="{QW.series}"/&gt;<br/>
+&lt;meta property="quantum" name="qw-series" content="{QW.series}"/&gt;<br/>
         {#if QW.previous}
-<span style="{QW.previousTested?"":`background-color:orange`}">&lt;meta:property ns="quantum" name="qw-previous" tested="{QW.previousTested}" content="{QW.previous}"/&gt;</span><br/>
+<span style="{QW.previousTested?"":`background-color:orange`}">&lt;meta property="quantum" name="qw-previous" tested="{QW.previousTested}" content="{QW.previous}"/&gt;</span><br/>
         {/if}
         {#if QW.next}
-<span style="{QW.nextTested?"":`background-color:orange`}">&lt;meta:property ns="quantum" name="qw-next" tested="{QW.nextTested}" content="{QW.next}"/&gt;</span><br/>
+<span style="{QW.nextTested?"":`background-color:orange`}">&lt;meta property="quantum" name="qw-next" tested="{QW.nextTested}" content="{QW.next}"/&gt;</span><br/>
         {/if}
     {/if}
     {#if QW.group && QW.groupid}
-&lt;meta:property ns="quantum" name="qw-group" content="{QW.group}"/&gt;<br/>
-&lt;meta:property ns="quantum" name="qw-groupid" content="{QW.groupid}"/&gt;<br/>
+&lt;meta property="quantum" name="qw-group" content="{QW.group}"/&gt;<br/>
+&lt;meta property="quantum" name="qw-groupid" content="{QW.groupid}"/&gt;<br/>
     {/if}
     {#if QW.point && QW.radius}
-&lt;meta:property ns="quantum" name="qw-point"  content="{QW.point}"/&gt;<br/>
-&lt;meta:property ns="quantum" name="qw-radius" content="{QW.radius}"/&gt;<br/>
+&lt;meta property="quantum" name="qw-point"  content="{QW.point}"/&gt;<br/>
+&lt;meta property="quantum" name="qw-radius" content="{QW.radius}"/&gt;<br/>
     {/if}
     {#if QW.bounds}
-&lt;meta:property ns="quantum" name="qw-bounds" content="{QW.bounds}"/&gt;<br/>
+&lt;meta property="quantum" name="qw-bounds" content="{QW.bounds}"/&gt;<br/>
     {/if}
 {/if}
     </code>
